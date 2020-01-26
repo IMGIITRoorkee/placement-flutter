@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:placement/services/routing/palcement_routes.dart';
+import 'package:placement/services/routing/placement_routes.dart';
 
 void main() => runApp(MyApp());
 
