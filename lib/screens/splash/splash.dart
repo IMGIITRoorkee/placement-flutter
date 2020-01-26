@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -8,6 +9,15 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 3), () {
+      Navigator.pushNamed(context, '/wrapper');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -22,12 +32,12 @@ class _SplashPageState extends State<SplashPage> {
           Column(
             children: <Widget>[
               Expanded(
-                flex: 4,
+                flex: 6,
                 child: Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircleAvatar(backgroundColor: Colors.blue,radius: 50.0,child: Icon(Icons.shopping_cart, size: 40.0, color: Colors.greenAccent,),),
+                      CircleAvatar(backgroundColor: Colors.blue,radius: 50.0,child: Icon(Icons.card_travel, size: 40.0, color: Colors.greenAccent,),),
                       Padding(
                         padding: EdgeInsets.only(top: 10.0),
                       ),

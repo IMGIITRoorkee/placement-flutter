@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:placement/services/routing/palcement_routes.dart';
+import 'package:placement/services/routing/placement_routes.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,7 +8,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("inside build");
     return MaterialApp(
       title: 'Placement',
       initialRoute: '/',
