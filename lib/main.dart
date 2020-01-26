@@ -8,7 +8,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("inside build");
     return MaterialApp(
       title: 'Placement',
       initialRoute: '/',
