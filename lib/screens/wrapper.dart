@@ -11,6 +11,6 @@ class WrapperPage extends StatelessWidget {
   Widget build(BuildContext context) {
     //final user = Provider.of<User>(context);
     //return user ==null ? Authenticate() : HomePage();
-    return HomePage();
+    return Authenticate();
   }
 }
