@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:placement/screens/home/homePage.dart';
 import 'package:placement/screens/splash/splash.dart';
 import 'package:placement/screens/wrapper.dart';
 
@@ -12,9 +13,15 @@ class RouteGeneratorPlacement {
         );
         break;
       case '/wrapper':
-      return MaterialPageRoute(
-        builder: (_) => WrapperPage()
-      );
+        return MaterialPageRoute(
+          builder: (_) => WrapperPage()
+        );
+      break;
+      case '/home':
+        return MaterialPageRoute(
+          builder: (_) => HomePage()    
+        );
+      break;
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
