@@ -5,6 +5,8 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:placement/resources/strings.dart';
+
 class SignIn extends StatefulWidget {
 
   final Function toggleview;
@@ -228,7 +230,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
           Expanded(
             flex: 2,
             child:Text(
-              'Channel i',
+              Strings.BRANDING,
               style: TextStyle(
                 color: Colors.blueAccent[200],
                 fontSize: _width*0.1

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:placement/resources/strings.dart';
+
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
 
@@ -46,7 +48,7 @@ class _SplashPageState extends State<SplashPage> {
                         padding: EdgeInsets.only(top: 10.0),
                       ),
                       Text(
-                        "Placement Online",
+                        Strings.PLACEMENT,
                         style: TextStyle(
                           color: Colors.blue,
                           fontSize: 24.0,
