@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:placement/resources/strings.dart';
+import 'package:placement/services/auth/auth_service.dart';
+import 'package:placement/shared/loadingPage.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -34,9 +32,8 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
   var _errorPasswordString;
   var _errorUsernameString;
 
-  //remove
-  final String url = 'https://swapi.co/api/starships';
-  List data;
+  AuthService _auth;
+  bool _loading = false;
 
   bool _keyboardIsVisible() {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
@@ -67,7 +64,9 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
     );
     _controller.forward();
     _controllerForm.forward();
+    _auth = AuthService();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +75,9 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
     return containsLogin(context, _width, _height);
   }
 
-  Widget containsLogin(BuildContext context, double _width,double _height) {
-    return Scaffold(
+  Widget containsLogin(BuildContext context, double _width, double _height) {
+    return _loading ? LoadingPage() : Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
           SafeArea( 
@@ -182,7 +182,22 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(7.0)
             ),
             onPressed: () {
-              if( _validateUsername() && _validatePassword() ) Navigator.pushNamed(context, '/home');
+              if( _validateUsername() && _validatePassword() ) {
+                setState(() {
+                  _loading = ! _loading;
+                });
+                Map<String,String> dataMap = {
+                  'username' : _usernameController.text,
+                  'password' : _passwordController.text
+                };
+                // if(_auth.signInWithEmailPassword(dataMap) == 0) {
+                //   return;
+                // }
+                Navigator.of(context).pushNamedAndRemoveUntil('/home',(Route<dynamic> route)=>false);
+                setState(() {
+                  _loading = false ;
+                });
+              }
               return;
             },
           )
