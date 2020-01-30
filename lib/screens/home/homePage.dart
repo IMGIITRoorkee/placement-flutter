@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:placement/resources/strings.dart';
+import 'package:placement/screens/home/applyPage.dart';
+import 'package:placement/screens/home/resultPage.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -11,21 +13,24 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
 
   TabController _tabController;
-  dynamic a;
   
   final List<Tab> _bottomTab = <Tab>[
       Tab(
-        icon: Icon(Icons.access_alarm),
+        icon: Icon(Icons.check_circle),
+        text: 'Apply',
       ),
       Tab(
-        icon: Icon(Icons.account_box),
+        icon: Icon(Icons.insert_drive_file),
+        text: 'Results',
       ),
       Tab(
-        icon: Icon(Icons.add_circle),
+        icon: Icon(Icons.perm_contact_calendar),
+        text: 'Calendar',
       ),
       Tab(
-        icon: Icon(Icons.add_alert),
-      ),
+        icon: Icon(Icons.person),
+        text: 'Profile',
+      )
   ];
 
   @override
@@ -46,38 +51,42 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              print("Notified!!");
-            },
-          ),
-        ],
-        title: Text(Strings.HOME_APPBAR),
-        centerTitle: true,
-      ),
       body: TabBarView(
         controller: _tabController,
         children: _tabSelector(),
       ),
-      bottomNavigationBar: TabBar(
-        controller: _tabController,
-        tabs: _bottomTab,
-        indicatorPadding: EdgeInsets.all(5.0),
-        labelColor: Colors.red,
-      ),
+      bottomNavigationBar: 
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 10.0,
+              spreadRadius: 2.0,
+              offset: Offset(0,-5),
+            ),
+          ]
+        ),
+        child: TabBar(
+          controller: _tabController,
+          tabs: _bottomTab,
+          indicatorPadding: EdgeInsets.all(5.0),
+          indicatorColor: Colors.blueAccent,
+          labelColor: Colors.blueAccent,
+          unselectedLabelColor: Colors.grey,
+        )
+      )
     );
   }
 
   _tabSelector() {
     return <Widget>[
       Container(
-        child: Text("Under Construction")
+        child: ApplyPage()
       ),
       Container(
-        child: Text("Under Construction")
+        child: ResultPage()
       ),
       Container(
         child: Text("Under Construction")
