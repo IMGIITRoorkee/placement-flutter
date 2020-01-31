@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:placement/resources/strings.dart';
+import 'package:placement/services/api_models/profileListForAll.dart';
+import 'package:placement/services/auth/auth_service.dart';
+import 'package:placement/shared/loadingPage.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -12,10 +15,15 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
 
+  AuthService _auth;
+  ProfilesForAllService _ProfilesForAllService;
+
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
+    _auth = AuthService();
+    _ProfilesForAllService = ProfilesForAllService();
+    Timer(Duration(seconds: 2), () {
       Navigator.pushNamed(context, '/wrapper');
     });
   }
@@ -58,6 +66,15 @@ class _SplashPageState extends State<SplashPage> {
                     ],
                   ),
                 ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    LoadingPage(),
+                  ],
+                )
               ),
               Expanded(
                 flex: 1,
