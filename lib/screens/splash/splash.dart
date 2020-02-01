@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
     _auth = AuthService();
     _fetchService = FetchService();
     Timer(Duration(seconds: 2), () {
-      Navigator.pushNamed(context, '/wrapper');
+      Navigator.of(context).pushNamedAndRemoveUntil('/wrapper',(Route<dynamic> route)=>false);
     });
   }
 

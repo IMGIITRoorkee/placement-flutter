@@ -6,6 +6,7 @@ class EndPoints {
 
   static const String PROFILES_CLOSED = 'api/placement_and_internship/profiles/';
   static const String PROFILES_ALL = 'api/placement_and_internship/profiles/not_closed/';
+  static final String CANDIDATE = 'api/placement_and_internship/get_or_create_candidate/';
 
   // Amidst the Trials on Dathomir
   static const String CALLING_STARSHIPS = 'https://swapi.co/api/starships'; 
