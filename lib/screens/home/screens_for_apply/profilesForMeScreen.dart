@@ -40,23 +40,26 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
                 snapshot.data[index].applicationDeadline !=null ?
                 Jiffy(snapshot.data[index].applicationDeadline.toString()).yMMMd :
                 'Open';
-              return ListTile(
-                title: Text(
-                  snapshot.data[index].companyName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold
-                  ),
-                ),
-                subtitle: Text(
-                  "Apply Before: " + _date,
-                  style: TextStyle(
-                    height: 1.85,
-                  ),
-                ),
-                onTap: () {
-                  print("tapped");
-                },
-              );
+                return Card(
+                  margin: EdgeInsets.only(bottom: 1),
+                  child: ListTile(
+                    title: Text(
+                      snapshot.data[index].companyName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    subtitle: Text(
+                      "Apply Before: " + _date,
+                      style: TextStyle(
+                        height: 1.85,
+                      ),
+                    ),
+                    onTap: () {
+                      print("tapped");
+                    },
+                  )
+                );
             },
           );
         },
