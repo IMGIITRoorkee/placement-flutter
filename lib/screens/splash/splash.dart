@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:placement/resources/strings.dart';
-import 'package:placement/services/api_models/profileListForAll.dart';
+import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/services/auth/auth_service.dart';
 import 'package:placement/shared/loadingPage.dart';
 
@@ -16,13 +16,13 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
 
   AuthService _auth;
-  ProfilesForAllService _ProfilesForAllService;
+  FetchService _fetchService;
 
   @override
   void initState() {
     super.initState();
     _auth = AuthService();
-    _ProfilesForAllService = ProfilesForAllService();
+    _fetchService = FetchService();
     Timer(Duration(seconds: 2), () {
       Navigator.pushNamed(context, '/wrapper');
     });
