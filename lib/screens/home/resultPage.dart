@@ -46,13 +46,17 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
         title: Text(Strings.PLACEMENT_YEAR),
         centerTitle: true,
       ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          child: _profilesListPage(context),
-          color: Colors.blue,
-        )
-      )
+      body: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              child: _profilesListPage(context),
+              color: Colors.blue,
+            )
+          ),
+        ],
+      ),
     );
   }
 
