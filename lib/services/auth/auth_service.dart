@@ -10,7 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placement/resources/strings.dart';
 
 class AuthService {
-  static final  AuthService _auth = AuthService.internal()  ;
+  static final  AuthService _auth = AuthService.internal();
 
   factory AuthService() => _auth;
 
@@ -25,13 +25,16 @@ class AuthService {
   Future<int> signInWithEmailPassword(Map<String,String> data) async {
     var jsonData;
     try{
+      print(EndPoints.HOST+EndPoints.LOGIN);
       var res = await http.post(
-        EndPoints.LOGIN,
+        EndPoints.HOST+EndPoints.LOGIN,
         body: data
       );
       if(res.statusCode == 200) {
         jsonData = json.decode(res.body);
-        _encrypt(jsonData["token"]);
+        _encrypt(jsonData["access"], jsonData["refresh"]);
+        print(jsonData["access"]);
+        print(jsonData["refresh"]);
         return 0;
       }
       return null;
@@ -42,8 +45,7 @@ class AuthService {
   }
 
   bool authStateListener() {
-    if(_box.get('token', defaultValue: '') == '') return false;
-    return true;
+    return !(_box.get('token', defaultValue: '') == '');
   }
 
   dynamic logOut() {
@@ -51,16 +53,15 @@ class AuthService {
     return "Logged Out";
   }
 
-  _encrypt(String token) {
-    _box.put('token', token);
+  _encrypt(String access, String refresh) {
+    _box.put('access', access);
+    _box.put('refresh', refresh);
     print("Saved!!");
   }
 
   _openEncryptedBox() async {
       await Hive.initFlutter();
       await Hive.openBox(Strings.AUTH_BOX);
-      print("box opened!!\n");
       _box = Hive.box(Strings.AUTH_BOX);
-      print("box ready!!");
   }
 }
