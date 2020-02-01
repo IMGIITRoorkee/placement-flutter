@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  _tabSelector() {
+  List<Widget> _tabSelector() {
     return <Widget>[
       Container(
         child: ApplyPage()
