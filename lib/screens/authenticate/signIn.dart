@@ -109,7 +109,6 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
             animation: _growAnimation,
             child: containsBranding(context, _width, _height),
             builder: (context,child) {
-              print(1-_growAnimation.value);
               return Transform.scale(
                 child: child,
                 scale: (1-_growAnimation.value),
@@ -190,9 +189,9 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                   'username' : _usernameController.text,
                   'password' : _passwordController.text
                 };
-                // if(_auth.signInWithEmailPassword(dataMap) == 0) {
-                //   return;
-                // }
+                if(_auth.signInWithEmailPassword(dataMap) == 0) {
+                  return;
+                }
                 Navigator.of(context).pushNamedAndRemoveUntil('/home',(Route<dynamic> route)=>false);
                 setState(() {
                   _loading = false ;
