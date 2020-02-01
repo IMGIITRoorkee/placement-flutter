@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:placement/resources/strings.dart';
 import 'package:placement/screens/home/applyPage.dart';
+import 'package:placement/screens/home/candidatePage.dart';
 import 'package:placement/screens/home/resultPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -50,6 +51,38 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    return _homePageStack(context);
+  }
+
+  Widget _homePageStack(BuildContext contaxt) {
+    return Stack(
+      children: <Widget>[
+        _homePageScaffold(context),
+        SafeArea(
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              child: GestureDetector(
+                onTap: () {
+                  print("tapped!!");
+                },
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 10, 0.0),
+                  child: Icon(
+                    Icons.notifications,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ),
+          )
+        )
+      ],
+    );
+  }
+
+  Widget _homePageScaffold(BuildContext context) {
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
@@ -92,7 +125,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         child: Text("Under Construction")
       ),
       Container(
-        child: Text("Under Construction")
+        child: CandidatePage()
       ),
     ];
   }
