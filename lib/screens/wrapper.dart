@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:placement/screens/authenticate/authenticatePage.dart';
 import 'package:placement/screens/home/homePage.dart';
-import 'package:provider/provider.dart';
-import 'package:placement/models/user.dart';
+import 'package:placement/services/auth/auth_service.dart';
 
-class WrapperPage extends StatelessWidget {
-  const WrapperPage({Key key}) : super(key: key);
+class WrapperPage extends StatefulWidget {
+  WrapperPage({Key key}) : super(key: key);
+
+  @override
+  _WrapperPageState createState() => _WrapperPageState();
+}
+
+class _WrapperPageState extends State<WrapperPage> {
+
+  AuthService _auth;
+
+  @override
+  void initState() {
+    super.initState();
+    _auth = AuthService();
+  }
 
   @override
   Widget build(BuildContext context) {
-    //final user = Provider.of<User>(context);
-    //return user ==null ? Authenticate() : HomePage();
-    return Authenticate();
+    return _auth.authStateListener() ? HomePage() : Authenticate();
+    //return Authenticate();
   }
 }
