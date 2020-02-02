@@ -44,8 +44,26 @@ class AuthService {
     }
   }
 
+  Future<void> refreshToken() async {
+    var _jsonData;
+    String _refresh = _box.get('refresh');
+    try{
+      var _res = await http.post(
+        {
+          'refresh' : _refresh
+        },
+      );
+      if(_res.statusCode == 200) {
+        _jsonData = json.decode(_res.body);
+        _encryptToken(_jsonData['access']);
+      }
+    } catch(e) {
+
+    }
+  }
+
   bool authStateListener() {
-    return !(_box.get('token', defaultValue: '') == '');
+    return !(_box.get('access', defaultValue: '') == '');
   }
 
   dynamic logOut() {
@@ -57,6 +75,10 @@ class AuthService {
     _box.put('access', access);
     _box.put('refresh', refresh);
     print("Saved!!");
+  }
+
+  _encryptToken(String access) {
+    _box.put('access', access);
   }
 
   _openEncryptedBox() async {
