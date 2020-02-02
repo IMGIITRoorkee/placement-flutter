@@ -6,11 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placement/resources/strings.dart';
+import 'package:placement/services/auth/auth_service.dart';
 
 class FetchService {
 
   static final  FetchService _fetchService = FetchService.internal();
-
+  var _auth;
   factory FetchService() => _fetchService;
 
   FetchService.internal() {
@@ -19,6 +20,7 @@ class FetchService {
 
   void initState() { 
     _openEncryptedBox();
+    _auth = AuthService();
   }
   var _box;
 
@@ -34,7 +36,11 @@ class FetchService {
       if(res.statusCode == 200) {
         return json.decode(res.body);
       }
-      return null;
+      if(res.statusCode == 401) {
+        _auth.refreshToken();
+        return fetchDataService(endPoint);
+      }
+      return -1;
     } catch(e) {
       print(e.toString());
       return null;
