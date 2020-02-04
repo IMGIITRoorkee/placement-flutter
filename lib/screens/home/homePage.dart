@@ -68,11 +68,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 },
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 10.0, 10, 0.0),
-                  child: Icon(
-                    Icons.notifications,
-                    size: 30,
-                    color: Colors.white,
-                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.notifications,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/notifs');
+                      },
+                    )
+                  )  
                 ),
               )
             ),
