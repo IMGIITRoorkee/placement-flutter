@@ -14,6 +14,7 @@ class ApplyPage extends StatefulWidget {
 class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMixin {
 
   TabController _tabController;
+  ScrollController _scrollController;
   bool _showProfilesForMe = true;
 
     @override
@@ -23,11 +24,13 @@ class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMix
       vsync: this,
       length: 2
     );
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -44,26 +47,28 @@ class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     final double _width = MediaQuery.of(context).size.width;
     final double _height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        title: Text(Strings.APPLY_APPBAR),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              child: _profilesListPage(context),
-              color: Colors.blue,
-            )
+    return NestedScrollView(
+      controller: _scrollController,
+      headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+        return <Widget>[
+          SliverAppBar(
+            title: Text(Strings.APPLY_APPBAR),
+            centerTitle: true,
+              pinned: true,
+              floating: true,
+              forceElevated: boxIsScrolled,
+              bottom: _profilesListPage(context),
           ),
-          Container(
-            child: _tabSelector(context),
-          )
+        ];
+      },
+      body: TabBarView(
+        controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[
+          ProfilesForMePage(),
+          ProfilesForAllPage()
         ],
-      )
+      ),
     );
   }
 
@@ -76,24 +81,8 @@ class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMix
       indicatorColor: Colors.white,
       indicatorWeight: 6.0,
       onTap: (index) {
-        switch (index) {
-          case 0 :
-            setState(() {
-              _showProfilesForMe = true;
-            });
-            break;
-          case 1 :
-            setState(() {
-              _showProfilesForMe = false;
-            });
-            break;
-          default:
-        }
+        
       },
     );
-  }
-
-  Widget _tabSelector(BuildContext context) {
-    return _showProfilesForMe ? ProfilesForMePage() : ProfilesForAllPage();
   }
 }
