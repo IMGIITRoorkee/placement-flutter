@@ -8,11 +8,14 @@ import 'package:placement/resources/endpoints.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placement/resources/strings.dart';
+import 'package:placement/services/api_models/fetchService.dart';
 
 class AuthService {
+  FetchService _fetchService;
   static final  AuthService _auth = AuthService.internal();
 
   factory AuthService() => _auth;
+  
 
   AuthService.internal() {
     initState();
@@ -25,7 +28,6 @@ class AuthService {
   Future<int> signInWithEmailPassword(Map<String,String> data) async {
     var jsonData;
     try{
-      print(EndPoints.HOST+EndPoints.LOGIN);
       var res = await http.post(
         EndPoints.HOST+EndPoints.LOGIN,
         body: data
@@ -33,8 +35,6 @@ class AuthService {
       if(res.statusCode == 200) {
         jsonData = json.decode(res.body);
         _encrypt(jsonData["access"], jsonData["refresh"]);
-        print(jsonData["access"]);
-        print(jsonData["refresh"]);
         return 0;
       }
       return null;
@@ -49,11 +49,10 @@ class AuthService {
     String _refresh = _box.get('refresh');
     try{
       var _res = await http.post(
-        {
-          'refresh' : _refresh
-        },
+        EndPoints.HOST + EndPoints.REFRESH,
+        body: {'refresh' : _refresh},
       );
-      if(_res.statusCode == 200) {
+      if(_res.statusCode == 200) { 
         _jsonData = json.decode(_res.body);
         _encryptToken(_jsonData['access']);
       }
@@ -74,7 +73,12 @@ class AuthService {
   _encrypt(String access, String refresh) {
     _box.put('access', access);
     _box.put('refresh', refresh);
-    print("Saved!!");
+  }
+
+  fetchHeaderProvider(String endpoint) {
+    return {
+      'Authorization' : 'Bearer ' + _box.get('access')
+    };
   }
 
   _encryptToken(String access) {
@@ -82,8 +86,10 @@ class AuthService {
   }
 
   _openEncryptedBox() async {
+    print("initialising box");
       await Hive.initFlutter();
       await Hive.openBox(Strings.AUTH_BOX);
       _box = Hive.box(Strings.AUTH_BOX);
+      refreshToken();
   }
 }

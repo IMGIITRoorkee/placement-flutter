@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:placement/screens/home/homePage.dart';
-import 'package:placement/screens/home/screens_for_apply/screens_for_result_details/resultDetailsBranchWise.dart';
+import 'package:placement/screens/home/screens_for_result_details/resultDetailsBranchWise.dart';
 import 'package:placement/screens/home/screens_for_result_details/resultDetailsCompanyWise.dart';
+import 'package:placement/screens/notifications/notificationsScreen.dart';
 import 'package:placement/screens/splash/splash.dart';
 import 'package:placement/screens/wrapper.dart';
 
 class RouteGeneratorPlacement {
   static Route<dynamic> getRoutes(RouteSettings settings) {
+
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
@@ -25,13 +27,20 @@ class RouteGeneratorPlacement {
         );
       break;
       case '/result_details_branchwise':
+      var _resultArgs = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => ResultDetailsBranchWise()
+          builder: (_) => ResultDetailsBranchWise(args: _resultArgs,)
         );
       break;
       case '/result_details_companywise':
+      var _resultArgs = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => ResultDetailsCompanyWise()
+          builder: (_) => ResultDetailsCompanyWise(args: _resultArgs,)
+        );
+      break;
+      case '/notifs':
+        return MaterialPageRoute(
+          builder: (_) => NotificationsScreen()
         );
       break;
       default:

@@ -16,13 +16,12 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
 
   AuthService _auth;
-  FetchService _fetchService;
+
 
   @override
   void initState() {
     super.initState();
     _auth = AuthService();
-    _fetchService = FetchService();
     Timer(Duration(seconds: 2), () {
       Navigator.of(context).pushNamedAndRemoveUntil('/wrapper',(Route<dynamic> route)=>false);
     });

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:placement/resources/strings.dart';
+import 'package:placement/screens/home/screen_for_results.dart/resultsBranchWise.dart';
+import 'package:placement/screens/home/screen_for_results.dart/resultsCompanyWise.dart';
 
 class ResultPage extends StatefulWidget {
   ResultPage({Key key}) : super(key: key);
@@ -11,6 +13,8 @@ class ResultPage extends StatefulWidget {
 class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateMixin {
 
   TabController _tabController;
+  ScrollController _scrollController;
+  bool _showBranchWiseResults = true;
 
     @override
   void initState() {
@@ -19,11 +23,13 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       vsync: this,
       length: 2
     );
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -40,27 +46,33 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     final double _width = MediaQuery.of(context).size.width;
     final double _height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        title: Text(Strings.PLACEMENT_YEAR),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              child: _profilesListPage(context),
-              color: Colors.blue,
+    int results_for; 
+      return NestedScrollView(
+        controller: _scrollController,
+        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              title: Text(Strings.PLACEMENT_YEAR),
+              centerTitle: true,
+              pinned: true,
+              floating: true,
+              forceElevated: boxIsScrolled,
+              bottom: _resultsListPage(context),
             )
-          ),
-        ],
-      ),
-    );
+          ];
+        },
+        body: TabBarView(
+          controller: _tabController,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            ResultsBranchWise(),
+            ResultsCompanyWise(),
+          ],
+        ),
+      );
   }
 
-  Widget _profilesListPage(BuildContext context) {
+  Widget _resultsListPage(BuildContext context) {
     return TabBar(
       controller: _tabController,
       tabs: _profileTabs,
@@ -68,6 +80,9 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       indicatorPadding: EdgeInsets.only(top: 10),
       indicatorColor: Colors.white,
       indicatorWeight: 6.0,
+      onTap: (index) {
+
+      },
     );
   }
 }
