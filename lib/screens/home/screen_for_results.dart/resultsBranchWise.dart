@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:placement/models/branchConciseModel.dart';
 import 'package:placement/resources/endpoints.dart';
 import 'package:placement/services/api_models/fetchService.dart';
+import 'package:placement/shared/dataProvider.dart';
 import 'package:placement/shared/loadingPage.dart';
+import 'package:provider/provider.dart';
 
 class ResultsBranchWise extends StatefulWidget {
-  bool resultType;
-  ResultsBranchWise({Key key,this.resultType}) : super(key: key);
+  int yearSelectionVariable;
+  ResultsBranchWise({Key key,this.yearSelectionVariable}) : super(key: key);
 
   @override
   _ResultsBranchWiseState createState() => _ResultsBranchWiseState();
@@ -15,33 +17,38 @@ class ResultsBranchWise extends StatefulWidget {
 class _ResultsBranchWiseState extends State<ResultsBranchWise> {
 
   var _fetch;
+  DataProvider _data;
 
   @override
   void initState() {
     super.initState();
-    _fetch  = FetchService();
+    _fetch = FetchService();
+    _data = DataProvider();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-       child: _resultDisplay(context),
+    return Consumer<DataProvider>(
+      builder: (context,data,child) {
+        return Container(
+          child: _resultDisplay(context,data.yearSelector)
+        );
+      },
     );
   }
 
-  Widget _resultDisplay(BuildContext context) {
+  Widget _resultDisplay(BuildContext context,int yearSelector) {
     return FutureBuilder(
-      future: _futureOfResults(context),
+      future: _futureOfResults(context, yearSelector),
       builder: (context, snapshot) {
         if(snapshot.data == null) {
           return LoadingPage();
         }
         return ListView.builder(
-          shrinkWrap: true,
           itemCount: snapshot.data.length,
           itemBuilder: (context, index) {
             return Card(
-              margin: EdgeInsets.only(bottom: 1),
+              margin: EdgeInsets.only(bottom: 1,top: 0),
               child: ListTile(
                 title: Text(
                   snapshot.data[index].studentBranchName,
@@ -66,10 +73,10 @@ class _ResultsBranchWiseState extends State<ResultsBranchWise> {
     );
   }
 
-  Future<List<BranchConciseModel>> _futureOfResults(BuildContext context) async {
+  Future<List<BranchConciseModel>> _futureOfResults(BuildContext context, int yearSelector) async {
     List<BranchConciseModel> _results = [];
     var _data = await _fetch.fetchDataService(
-      EndPoints.RESULTS_HOST + EndPoints.YEAR['y'] + EndPoints.RESULTS_BRANCH[0] + EndPoints.WITH_INDEX
+      EndPoints.RESULTS_HOST + EndPoints.YEAR['y'] + EndPoints.RESULTS_BRANCH[yearSelector] + EndPoints.WITH_INDEX
     );
     for (var r in _data) {
       _results.add(BranchConciseModel.fromJson(r));
