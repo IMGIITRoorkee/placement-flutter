@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:placement/resources/strings.dart';
 import 'package:placement/screens/home/screen_for_results.dart/resultsBranchWise.dart';
 import 'package:placement/screens/home/screen_for_results.dart/resultsCompanyWise.dart';
+import 'package:placement/shared/dataProvider.dart';
 
 class ResultPage extends StatefulWidget {
   ResultPage({Key key}) : super(key: key);
@@ -14,7 +15,8 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
 
   TabController _tabController;
   ScrollController _scrollController;
-  bool _showBranchWiseResults = true;
+  int yesrSelectionVariable = 0;
+  DataProvider data;
 
     @override
   void initState() {
@@ -24,6 +26,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       length: 2
     );
     _scrollController = ScrollController();
+    data = DataProvider();
   }
 
   @override
@@ -46,30 +49,37 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     final double _width = MediaQuery.of(context).size.width;
     final double _height = MediaQuery.of(context).size.height;
-    int results_for; 
-      return NestedScrollView(
-        controller: _scrollController,
-        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              title: Text(Strings.PLACEMENT_YEAR),
-              centerTitle: true,
-              pinned: true,
-              floating: true,
-              forceElevated: boxIsScrolled,
-              bottom: _resultsListPage(context),
-            )
-          ];
-        },
-        body: TabBarView(
-          controller: _tabController,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            ResultsBranchWise(),
-            ResultsCompanyWise(),
-          ],
-        ),
-      );
+    return _resultsView(context);
+    // return ChangeNotifierProvider(
+    //   create: (context) => DataProvider(),
+    //   child: _resultsView(context)
+    // );
+  }
+
+  Widget _resultsView(BuildContext context) {
+    return NestedScrollView(
+      controller: _scrollController,
+      headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+        return <Widget>[
+          SliverAppBar(
+            title: Text(Strings.PLACEMENT_YEAR),
+            centerTitle: true,
+            pinned: true,
+            floating: true,
+            forceElevated: boxIsScrolled,
+            bottom: _resultsListPage(context),
+          )
+        ];
+      },
+      body: TabBarView(
+        controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[
+          ResultsBranchWise(),
+          ResultsCompanyWise(),
+        ],
+      ),
+    );
   }
 
   Widget _resultsListPage(BuildContext context) {
@@ -81,7 +91,6 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       indicatorColor: Colors.white,
       indicatorWeight: 6.0,
       onTap: (index) {
-
       },
     );
   }
