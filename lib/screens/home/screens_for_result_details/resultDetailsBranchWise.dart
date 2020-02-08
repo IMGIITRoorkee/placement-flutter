@@ -33,18 +33,6 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
   }
 
   Widget _branchResults(BuildContext context) {
-    //_futureOfResults(context);
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text("test"),
-    //   ),
-    //   body: Container(
-    //     color: Colors.red,
-    //     height: 200,
-    //     width: 200,
-    //     child: Text(EndPoints.RESULTS_HOST + widget.args),
-    //   ),
-    // );
     return FutureBuilder(
       future: _futureOfResults(context),
       builder: (context, snapshot) {
