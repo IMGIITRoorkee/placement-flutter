@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:placement/models/companyConciseModel.dart';
 import 'package:placement/resources/endpoints.dart';
 import 'package:placement/services/api_models/fetchService.dart';
+import 'package:placement/shared/dataProvider.dart';
 import 'package:placement/shared/loadingPage.dart';
+import 'package:provider/provider.dart';
 
 class ResultsCompanyWise extends StatefulWidget {
   bool resultType;
@@ -24,14 +26,18 @@ class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-       child: _resultDisplay(context),
+    return Consumer<DataProvider>(
+      builder: (context,data,child) {
+        return Container(
+          child: _resultDisplay(context,data.yearSelector)
+        );
+      },
     );
   }
 
-  Widget _resultDisplay(BuildContext context) {
+  Widget _resultDisplay(BuildContext context, int yearSelector) {
     return FutureBuilder(
-      future: _futureOfResults(context),
+      future: _futureOfResults(context, yearSelector),
       builder: (context, snapshot) {
         if(snapshot.data == null) {
           return LoadingPage();
@@ -78,7 +84,7 @@ class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
     );
   }
 
-  Future<List<CompanyConciseModel>> _futureOfResults(BuildContext context) async {
+  Future<List<CompanyConciseModel>> _futureOfResults(BuildContext context, int yearSelector) async {
     List<CompanyConciseModel> _results = [];
     var _data = await _fetch.fetchDataService(
       EndPoints.RESULTS_HOST + EndPoints.YEAR['y'] + EndPoints.RESULTS_COMPANY[0] + EndPoints.WITH_INDEX
