@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:placement/models/profilesModel.dart';
 import 'package:placement/resources/endpoints.dart';
+import 'package:placement/resources/fetchedResources.dart';
 import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
@@ -17,11 +18,14 @@ class ProfilesForAllPage extends StatefulWidget {
 class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
 
   var _fetch;
+  var _fetchedResources;
+  List<ProfilesModel> _profiles = [];
 
   @override
   void initState() {
     super.initState();
     _fetch  = FetchService();
+    _fetchedResources = FetchedResources();
   }
 
   @override
@@ -40,7 +44,7 @@ class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
             itemBuilder: (BuildContext context, int index) {
               String _date =
                 snapshot.data[index].applicationDeadline !=null ?
-                Jiffy(snapshot.data[index].applicationDeadline.toString()).yMMMd :
+                "Apply before " + Jiffy(snapshot.data[index].applicationDeadline.toString()).yMMMd :
                 'Open';
                 return Card(
                   margin: EdgeInsets.only(bottom: 1),
@@ -52,7 +56,7 @@ class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
                       ),
                     ),
                     subtitle: Text(
-                      "Apply Before: " + _date,
+                      "Status: " + _date,
                       style: TextStyle(
                         height: 1.85,
                       ),
@@ -70,11 +74,15 @@ class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
   }
 
   Future<List<ProfilesModel>>  _giveList(BuildContext context) async {    
-    List<ProfilesModel> _profiles = [];
-    var _data = await _fetch.fetchDataService(EndPoints.HOST+EndPoints.PROFILES_ALL);
-    for(var p in _data) {
-      _profiles.add(ProfilesModel.fromJson(p));
+    if (!_fetchedResources.applyForAll['initialised']) {
+      var _data = await _fetch.fetchDataService(EndPoints.HOST+EndPoints.PROFILES_ALL);
+      for(var p in _data) {
+        _profiles.add(ProfilesModel.fromJson(p));
+      }
+      _fetchedResources.setApplyForAll(_profiles);
+      return _profiles;
+    } else {
+      return _fetchedResources.applyForAll['data'];
     }
-    return _profiles;
   }
 }
