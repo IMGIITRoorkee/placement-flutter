@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:placement/resources/strings.dart';
 import 'package:placement/screens/home/applyPage.dart';
+import 'package:placement/screens/home/calendarPage.dart';
 import 'package:placement/screens/home/candidatePage.dart';
 import 'package:placement/screens/home/resultPage.dart';
 
@@ -14,6 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
 
   TabController _tabController;
+  bool _isCollapsed = true;
   
   final List<Tab> _bottomTab = <Tab>[
       Tab(
@@ -49,12 +53,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return _homePageStack(context);
+  void _onHorizontalDrag(DragEndDetails details) {
+    if(details.primaryVelocity == 0) return; // user have just tapped on screen (no dragging)
+
+    if (details.primaryVelocity.compareTo(0) == -1)
+      setState(() {
+        _isCollapsed = true;
+    });
   }
 
-  Widget _homePageStack(BuildContext contaxt) {
+  @override
+  Widget build(BuildContext context) {
+    var _size = MediaQuery.of(context).size;
+    double _height = _size.height;
+    double _width = _size.width;
+    return _homePageStack(context, _height, _width);
+  }
+
+  Widget _homePageStack(BuildContext context, double _height, double _width) {
     return Stack(
       children: <Widget>[
         _homePageScaffold(context),
@@ -85,6 +101,89 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               )
             ),
           )
+        ),
+        SafeArea(
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              child: GestureDetector(
+                onTap: () {
+                  print("tapped!!");
+                },
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 10, 0.0),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.menu,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isCollapsed = false;
+                        });
+                      },
+                    )
+                  )  
+                ),
+              )
+            ),
+          )
+        ),
+        Container(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            child: Container(
+              height: _isCollapsed ? 0 : _height,
+              width:  _isCollapsed ? 0 : _width,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200.withOpacity(0.05)
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          child: GestureDetector(
+            onHorizontalDragEnd: (DragEndDetails details) => _onHorizontalDrag(details),
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              height: _height,
+              width: _isCollapsed ? 0 : _width*0.75,
+              child: _isCollapsed ? Container() :
+              Material(
+                elevation: 8.0,
+                child: Scaffold(
+                  appBar: AppBar(
+                    elevation: 0.0,
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.arrow_back_ios),
+                        onPressed: () {
+                          setState(() {
+                            _isCollapsed = true;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                  body: Container(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        if (constraints.maxWidth < 50) {
+                          return Container();
+                        } else {
+                          return menu(context, _height, _width);
+                        }
+                      },
+                    )
+                  ),
+                ),
+              ),
+            ),
+          ),
         )
       ],
     );
@@ -130,11 +229,63 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         child: ResultPage()
       ),
       Container(
-        child: Text("Under Construction")
+        child: CalendarPage()
       ),
       Container(
         child: CandidatePage()
       ),
     ];
+  }
+
+  Widget menu(BuildContext context, double _height, double _width) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            color: Colors.blue,
+            height: 200,
+            child: Center(
+              child: Icon(
+                Icons.arrow_drop_down_circle,
+                size: 40,  
+              ),
+            ),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.all(5.0),
+            leading: Icon(Icons.access_alarm),
+            title: Text("Items"),
+            onTap: () {
+              
+            },
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.all(5.0),
+            leading: Icon(Icons.access_alarm),
+            title: Text("Items"),
+            onTap: () {
+              
+            },
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.all(5.0),
+            leading: Icon(Icons.access_alarm),
+            title: Text("Items"),
+            onTap: () {
+              
+            },
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.all(5.0),
+            leading: Icon(Icons.access_alarm),
+            title: Text("Items"),
+            onTap: () {
+              
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
