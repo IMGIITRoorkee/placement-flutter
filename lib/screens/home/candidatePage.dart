@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:placement/models/candidateModel.dart';
 import 'package:placement/resources/endpoints.dart';
+import 'package:placement/resources/fetchedResources.dart';
 import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
@@ -14,11 +15,13 @@ class CandidatePage extends StatefulWidget {
 class _CandidatePageState extends State<CandidatePage> {
 
     var _fetch;
+    var _fetchedResources;
 
   @override
   void initState() {
     super.initState();
     _fetch  = FetchService();
+    _fetchedResources = FetchedResources();
   }
   @override
   Widget build(BuildContext context) {
@@ -30,9 +33,9 @@ class _CandidatePageState extends State<CandidatePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Profile"),
+        centerTitle: true,
       ),
       body: Container(
-        //width: _width*0.95,
         child: FutureBuilder(
           future: _giveCandidate(),
           builder: (context,snapshot) {
@@ -131,7 +134,13 @@ class _CandidatePageState extends State<CandidatePage> {
   }
 
   Future<CandidateModel> _giveCandidate() async {
-    var _data = await _fetch.fetchDataService(EndPoints.HOST+EndPoints.CANDIDATE);
-    return CandidateModel.fromJson(_data);
+    if(!_fetchedResources.candidateProfile['initialised']) {
+      var _data = await _fetch.fetchDataService(EndPoints.HOST+EndPoints.CANDIDATE);
+      var _candidate = CandidateModel.fromJson(_data);
+      _fetchedResources.setCandidateProfile(_candidate);
+      return _candidate;
+    } else {
+      return _fetchedResources.candidateProfile['data'];
+    }
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:placement/resources/strings.dart';
 import 'package:placement/screens/home/screens_for_apply/profilesForAllScreen.dart';
 import 'package:placement/screens/home/screens_for_apply/profilesForMeScreen.dart';
-import 'package:placement/services/api_models/fetchService.dart';
 
 class ApplyPage extends StatefulWidget {
   ApplyPage({Key key}) : super(key: key);
@@ -15,7 +14,6 @@ class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMix
 
   TabController _tabController;
   ScrollController _scrollController;
-  bool _showProfilesForMe = true;
 
     @override
   void initState() {
@@ -54,10 +52,10 @@ class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMix
           SliverAppBar(
             title: Text(Strings.APPLY_APPBAR),
             centerTitle: true,
-              pinned: true,
-              floating: true,
-              forceElevated: boxIsScrolled,
-              bottom: _profilesListPage(context),
+            pinned: true,
+            floating: true,
+            forceElevated: boxIsScrolled,
+            bottom: _profilesListPage(context),
           ),
         ];
       },
