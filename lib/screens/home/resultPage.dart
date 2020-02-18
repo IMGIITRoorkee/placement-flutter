@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:placement/resources/strings.dart';
-import 'package:placement/screens/home/screen_for_results/bottomSheetForm.dart';
-import 'package:placement/screens/home/screen_for_results/resultsBranchWise.dart';
-import 'package:placement/screens/home/screen_for_results/resultsCompanyWise.dart';
+import 'package:placement/screens/home/screen_for_results.dart/resultsBranchWise.dart';
+import 'package:placement/screens/home/screen_for_results.dart/resultsCompanyWise.dart';
+import 'package:placement/shared/dataProvider.dart';
 
 class ResultPage extends StatefulWidget {
   ResultPage({Key key}) : super(key: key);
@@ -15,19 +15,18 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
 
   TabController _tabController;
   ScrollController _scrollController;
-  int _yearSelectionVariable;
-  int _resultTypeVariable; 
+  int yesrSelectionVariable = 0;
+  DataProvider data;
 
     @override
   void initState() {
     super.initState();
-    _yearSelectionVariable = 0;
-    _resultTypeVariable = 0;
     _tabController = TabController(
       vsync: this,
       length: 2
     );
     _scrollController = ScrollController();
+    data = DataProvider();
   }
 
   @override
@@ -50,36 +49,11 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     final double _width = MediaQuery.of(context).size.width;
     final double _height = MediaQuery.of(context).size.height;
-    return Stack(
-      children: <Widget>[
-        _resultsView(context),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 10),
-            child: FloatingActionButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return BottomSheetForm(
-                      yearSelectionVariable: _yearSelectionVariable,
-                      resultTypeVariable: _resultTypeVariable,
-                      valueChangedForYear: (yearSelectionVariable) {
-                        _yearSelectionVariable = yearSelectionVariable;
-                      },
-                      valueChangedForResult: (resultTypeVariable) {
-                        _resultTypeVariable = resultTypeVariable;
-                      }
-                    );
-                  });
-              },
-              child: Icon(Icons.filter_b_and_w),
-            ),
-          ),
-        )
-      ],
-    );
+    return _resultsView(context);
+    // return ChangeNotifierProvider(
+    //   create: (context) => DataProvider(),
+    //   child: _resultsView(context)
+    // );
   }
 
   Widget _resultsView(BuildContext context) {
