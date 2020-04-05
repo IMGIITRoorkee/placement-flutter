@@ -5,6 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:placement/models/profilesModel.dart';
 import 'package:placement/resources/endpoints.dart';
 import 'package:placement/resources/fetchedResources.dart';
+import 'package:placement/screens/home/screens_for_apply/bottomModalApplySheet.dart';
 import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
@@ -52,7 +53,8 @@ class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
                     title: Text(
                       snapshot.data[index].companyName,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.bold,
+                        height: 1.5
                       ),
                     ),
                     subtitle: Text(
@@ -64,6 +66,19 @@ class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
                     onTap: () {
                       print("tapped");
                     },
+                    trailing: IconButton(
+                      icon: Icon(Icons.next_week),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return BottomModalApplySheet(
+                              applyId: 1, // TODO: realise proper implementation
+                            );
+                          }
+                        );
+                      },
+                    ),
                   )
                 );
             },

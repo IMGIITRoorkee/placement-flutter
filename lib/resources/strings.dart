@@ -5,8 +5,8 @@ class Strings {
   static const String PLACEMENT_YEAR = 'Placement 2019';
 
   static const List<String> APPLY_TABBAR = <String>[
+    'All Companies',
     'Open for Me',
-    'All Companies'
   ];
   static const List<String> RESULT_TABBAR = <String>[
     'By Branch',

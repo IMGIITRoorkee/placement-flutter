@@ -16,6 +16,7 @@ class EndPoints {
   static const String PROFILES_CLOSED = '/api/placement_and_internship/profiles/';
   static const String PROFILES_ALL = '/api/placement_and_internship/profiles/not_closed/';
   static final String CANDIDATE = '/api/placement_and_internship/get_or_create_candidate/';
+  static final String CANDIDATE_RESUME_LIST = '/api/placement_and_internship/resumes';
   static final List<String> RESULTS_COMPANY = [
     '/internship/company/',    // for internship
     '/placement/company/',     // for placement
