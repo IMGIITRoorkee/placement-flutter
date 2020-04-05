@@ -50,7 +50,8 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
                     title: Text(
                       snapshot.data[index].companyName,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.bold,
+                        height: 1.5
                       ),
                     ),
                     subtitle: Text(
@@ -62,6 +63,12 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
                     onTap: () {
                       print("tapped");
                     },
+                    trailing: IconButton(
+                      icon: Icon(Icons.next_week),
+                      onPressed: () {
+                        print("applying");
+                      },
+                    ),
                   )
                 );
             },
