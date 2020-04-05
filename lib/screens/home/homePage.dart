@@ -253,33 +253,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ),
           ),
           ListTile(
-            contentPadding: EdgeInsets.all(5.0),
-            leading: Icon(Icons.access_alarm),
-            title: Text("Items"),
+            contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
+            leading: Icon(Icons.format_list_bulleted),
+            title: Text("Resume list"),
             onTap: () {
               
             },
           ),
           ListTile(
-            contentPadding: EdgeInsets.all(5.0),
-            leading: Icon(Icons.access_alarm),
-            title: Text("Items"),
+            contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
+            leading: Icon(Icons.help_outline),
+            title: Text("FAQs"),
             onTap: () {
               
             },
           ),
           ListTile(
-            contentPadding: EdgeInsets.all(5.0),
-            leading: Icon(Icons.access_alarm),
-            title: Text("Items"),
+            contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
+            leading: Icon(Icons.info),
+            title: Text("About Us"),
             onTap: () {
               
             },
           ),
           ListTile(
-            contentPadding: EdgeInsets.all(5.0),
-            leading: Icon(Icons.access_alarm),
-            title: Text("Items"),
+            contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
+            leading: Icon(Icons.exit_to_app),
+            title: Text("Log Out"),
             onTap: () {
               
             },
