@@ -29,8 +29,8 @@ class FetchService {
     try {
       var res = await http.get(
         endPoint, 
-        headers: _headers);print(res.statusCode);
-      if(res.statusCode == 200) {print("inside 200");
+        headers: _headers);
+      if(res.statusCode == 200) {
         return json.decode(res.body);
       }
       if(res.statusCode == 401 && endPoint != EndPoints.HOST + EndPoints.LOGIN) {

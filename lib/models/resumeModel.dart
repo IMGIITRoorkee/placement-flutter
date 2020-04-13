@@ -27,17 +27,17 @@ class ResumeModel {
 
   factory ResumeModel.fromJson(Map<String, dynamic> _data) {
     return ResumeModel(
-      id: _data[''],
-      candidate: _data[''],
-      title: _data[''],
-      isDefault: _data[''],
-      interests: _data[''],
-      achievements: _data[''],
-      computerLanguages: _data[''],
-      softwarePackages: _data[''],
-      additionalCourses: _data[''],
-      minorCourses: _data[''],
-      languages: _data[''],
+      id: _data['id'],
+      candidate: _data['candidate'],
+      title: _data['title'],
+      isDefault: _data['isDefault'],
+      interests: _data['interests'],
+      achievements: _data['achievements'],
+      computerLanguages: _data['computerLanguages'],
+      softwarePackages: _data['softwarePackages'],
+      additionalCourses: _data['additionalCourses'],
+      minorCourses: _data['minorCourses'],
+      languages: _data['languages'],
     );
   }
 }

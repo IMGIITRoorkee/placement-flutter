@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:placement/screens/home/homePage.dart';
+import 'package:placement/screens/home/profilePage.dart';
 import 'package:placement/screens/home/screens_for_result_details/resultDetailsBranchWise.dart';
 import 'package:placement/screens/home/screens_for_result_details/resultDetailsCompanyWise.dart';
 import 'package:placement/screens/notifications/notificationsScreen.dart';
@@ -43,6 +44,11 @@ class RouteGeneratorPlacement {
           builder: (_) => NotificationsScreen()
         );
       break;
+      case '/profileDetail':
+        var _profileArgs = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => ProfilePage(args: _profileArgs)
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

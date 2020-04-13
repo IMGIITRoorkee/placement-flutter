@@ -3,6 +3,8 @@ import 'package:jiffy/jiffy.dart';
 import 'package:placement/models/profilesModel.dart';
 import 'package:placement/resources/endpoints.dart';
 import 'package:placement/resources/fetchedResources.dart';
+import 'package:placement/screens/home/screens_for_apply/bottomModalApplySheet.dart';
+import 'package:placement/services/api_models/deleteService.dart';
 import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
@@ -17,6 +19,7 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
 
   var _fetch;
   var _fetchedResources;
+  var _deleteService;
   List<ProfilesModel> _profiles = [];
 
   @override
@@ -24,6 +27,7 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
     super.initState();
     _fetch  = FetchService();
     _fetchedResources = FetchedResources();
+    _deleteService = DeleteService();
   }
 
   @override
@@ -42,7 +46,7 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
             itemBuilder: (BuildContext context, int index) {
               String _date =
                 snapshot.data[index].applicationDeadline !=null ?
-                "Apply before" + Jiffy(snapshot.data[index].applicationDeadline.toString()).yMMMd :
+                "Apply before " + Jiffy(snapshot.data[index].applicationDeadline.toString()).yMMMd :
                 'Open';
                 return Card(
                   margin: EdgeInsets.only(bottom: 1),
@@ -61,14 +65,9 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
                       ),
                     ),
                     onTap: () {
-                      print("tapped");
+                      Navigator.of(context).pushNamed("/profileDetail",arguments: snapshot.data[index]);
                     },
-                    trailing: IconButton(
-                      icon: Icon(Icons.next_week),
-                      onPressed: () {
-                        print("applying");
-                      },
-                    ),
+                    trailing: _profileStatusIcon(context,snapshot.data[index].status,snapshot.data[index])
                   )
                 );
             },
@@ -76,6 +75,100 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
         },
       ),
     );
+  }
+
+    Widget _profileStatusIcon(BuildContext context,String status, dynamic profile) {
+    switch (status) {
+      case 'branch_not_eligible':
+        return IconButton(
+          icon: Icon(Icons.highlight_off,color: Colors.red,),
+          onPressed: () {
+            showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => AlertDialog(
+                content: Text("This Company is Incompatilble with you branch"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ], 
+              )
+            );
+          },
+        );
+        break;
+      case 'expired':
+        return IconButton(
+          icon: Icon(Icons.highlight_off, color: Colors.red,),
+          onPressed: () {
+            showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => AlertDialog(
+                content: Text("This Deadline for application has expired"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ], 
+              )
+            );
+          },
+        );
+        break;
+      case 'open':
+        return IconButton(
+          icon: Icon(Icons.next_week, color: Colors.green,),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return BottomModalApplySheet(
+                  profile: profile,
+                );
+              }
+            );
+          },
+        );
+        break;
+      case 'withdrawable':
+        return IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.blue,),
+          onPressed: () {
+            showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => AlertDialog(
+                content: Text("Do you wish to withdraw your resume from this Company?"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Sure"),
+                    onPressed: () async {
+                      _deleteService.deleteApplicationService(profile['application']['id']);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Cancel"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ], 
+              )
+            );
+          },
+        );
+        break;
+      default:return Icon(Icons.signal_cellular_connected_no_internet_4_bar);
+    }
   }
 
   Future<List<ProfilesModel>>  _giveList(BuildContext context) async {
