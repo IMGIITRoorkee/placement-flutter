@@ -180,7 +180,11 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(7.0)
             ),
-            onPressed: () {
+            onPressed: () async {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if(!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
               if( _validateUsername() && _validatePassword() ) {
                 setState(() {
                   _loading = ! _loading;
@@ -189,10 +193,21 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                   'username' : _usernameController.text,
                   'password' : _passwordController.text
                 };
-                if(_auth.signInWithEmailPassword(dataMap) == 0) {
-                  return;
+                var _response = await _auth.signInWithEmailPassword(dataMap);
+                _passwordController.clear();
+                print("response = " + _response.toString());
+                if(_response == 0) {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/home',(Route<dynamic> route)=>false);
                 }
-                Navigator.of(context).pushNamedAndRemoveUntil('/home',(Route<dynamic> route)=>false);
+                else if (_response == 1) {
+                  _showTheDialog(context, "Incorrect Credentials");
+                }
+                else if (_response == -1) {
+                  _showTheDialog(context, "No Internet connection found");
+                }
+                else {
+                  _showTheDialog(context, "Something went wrong, Sorry for Inconvenience");
+                }
                 setState(() {
                   _loading = false ;
                 });
@@ -203,7 +218,6 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
         ),
         SizedBox(height: _height*0.02,),
         Container(
-          width: _width*0.60,
           child: Center(
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -223,6 +237,24 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
           ),
         ),
       ],
+    );
+  }
+
+  Future _showTheDialog(BuildContext context, String str) {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) => AlertDialog(
+        content: Text(str),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Retry"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      )
     );
   }
 
