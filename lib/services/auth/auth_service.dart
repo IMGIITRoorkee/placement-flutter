@@ -31,16 +31,22 @@ class AuthService {
       var res = await http.post(
         EndPoints.HOST+EndPoints.LOGIN,
         body: data
-      );
+      );print(res.statusCode);
       if(res.statusCode == 200) {
         jsonData = json.decode(res.body);
         _encrypt(jsonData["access"], jsonData["refresh"]);
         return 0;
       }
-      return null;
+      else if(res.statusCode == 401) {
+        print("got 401");
+        return 1;
+      }
+      else {
+        return -2;
+      }
     } catch(e) {
       print(e.toString());
-      return null;
+      return -1;
     }
   }
 
@@ -66,7 +72,8 @@ class AuthService {
   }
 
   dynamic logOut() {
-    _box.delete(Strings.AUTH_BOX);
+    _box.delete('access');
+    _box.delete('refresh');
     return "Logged Out";
   }
 
