@@ -6,6 +6,7 @@ import 'package:placement/screens/home/applyPage.dart';
 import 'package:placement/screens/home/calendarPage.dart';
 import 'package:placement/screens/home/candidatePage.dart';
 import 'package:placement/screens/home/resultPage.dart';
+import 'package:placement/services/auth/auth_service.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -18,6 +19,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   TabController _tabController;
   bool _isCollapsed = true;
+  AuthService _auth;
   
   final List<Tab> _bottomTab = <Tab>[
       Tab(
@@ -45,6 +47,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       vsync: this,
       length: 4
     );
+    _auth = AuthService();
   }
 
   @override
@@ -281,7 +284,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             leading: Icon(Icons.exit_to_app),
             title: Text("Log Out"),
             onTap: () {
-              
+              _auth.logOut();
+              Navigator.of(context).pushNamedAndRemoveUntil('/wrapper',(Route<dynamic> route)=>false);
             },
           ),
         ],
