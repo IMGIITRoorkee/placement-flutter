@@ -1,7 +1,8 @@
 class EndPoints {
 
-  // static const String HOST = 'http://192.168.121.228:3112';
-  static const String HOST = 'http://placementdev.channeli.in';
+  static const String HOST = 'http://192.168.121.228:3112';
+  // static const String HOST = 'http://placementdev.channeli.in';
+  //static const String HOST = 'http://103.37.200.131:8080/placement';
   static const String RESULTS_HOST = 'http://10.11.0.204';
   static final String WITH_INDEX = 'index.json';
 
