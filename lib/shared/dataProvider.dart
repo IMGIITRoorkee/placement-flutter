@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 
 class DataProvider with ChangeNotifier {
-  // static final _data = DataProvider.internal();
 
-  // factory DataProvider() => _data;
+  int _yearSelector;
+  bool _placementResultSelector;
 
-  // DataProvider.internal() {
-  //   initState();
-  // }
+  static final _data = DataProvider.internal();
 
-  // initState() {
-  //   _yearSelector = 0;
-  //   _placementResultSelector = true;
-  // }
+  factory DataProvider() => _data;
 
-  int _yearSelector = 0;
-  bool _placementResultSelector = true;
+  DataProvider.internal() {
+    initState();
+  }
+
+  initState() {
+    _yearSelector = 0;
+    _placementResultSelector = true;
+  }
+
 
   int get yearSelector => _yearSelector;
   void yearSetter(int year) {
