@@ -45,6 +45,7 @@ class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
           return ListView.builder(
             shrinkWrap: true,
             itemCount: snapshot.data.length,
+            padding: EdgeInsets.all(0),
             itemBuilder: (BuildContext context, int index) {
               String _date =
                 snapshot.data[index].applicationDeadline !=null ?
@@ -89,7 +90,7 @@ class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
               context: context,
               barrierDismissible: true,
               builder: (_) => AlertDialog(
-                content: Text("This Company is Incompatilble with you branch"),
+                content: Text("This Company is incompatible with you branch"),
                 actions: <Widget>[
                   FlatButton(
                     child: Text("OK"),
@@ -151,18 +152,40 @@ class _ProfilesForAllPageState extends State<ProfilesForAllPage> {
                 content: Text("Do you wish to withdraw your resume from this Company?"),
                 actions: <Widget>[
                   FlatButton(
-                    child: Text("Sure"),
-                    onPressed: () {
-                      _deleteService.deleteApplicationService(profile['application']['id']);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
                     child: Text("Cancel"),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                   ),
+                  FlatButton(
+                    child: Text("Sure"),
+                    onPressed: () {
+                      _deleteService.deleteApplicationService(profile.application.id);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ], 
+              )
+            );
+          },
+        );
+        break;
+      case 'locked':
+        return IconButton(
+          icon: Icon(Icons.lock, color: Colors.grey,),
+          onPressed: () {
+            showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => AlertDialog(
+                content: Text("This Application has been locked"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
                 ], 
               )
             );

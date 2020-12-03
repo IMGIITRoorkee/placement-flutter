@@ -7,6 +7,9 @@ import 'package:placement/screens/home/screens_for_result_details/resultDetailsC
 import 'package:placement/screens/notifications/notificationsScreen.dart';
 import 'package:placement/screens/splash/splash.dart';
 import 'package:placement/screens/wrapper.dart';
+import 'package:placement/views/CompanyDetailView.dart';
+import 'package:placement/views/ProfilesAppliedView.dart';
+import 'package:placement/views/ResumeListView.dart';
 
 class RouteGeneratorPlacement {
   static Route<dynamic> getRoutes(RouteSettings settings) {
@@ -47,8 +50,19 @@ class RouteGeneratorPlacement {
       case '/profileDetail':
         var _profileArgs = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => ProfilePage(args: _profileArgs)
+          builder: (_) => CompanyDetailView(args: _profileArgs)
         );
+      break;
+      case '/profileApplied':
+        return MaterialPageRoute(
+          builder: (_) => ProfilesAppliedView()
+        );
+      break;
+      case '/resumes':
+        return MaterialPageRoute(
+          builder: (_) => ResumeListView()
+        );
+      break;
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

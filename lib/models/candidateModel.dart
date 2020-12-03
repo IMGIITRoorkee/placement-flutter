@@ -1,13 +1,20 @@
+import 'package:placement/models/BranchRequirementModel.dart';
+
 class CandidateModel {
-  final int candidateId;
-  final String candidateName;
-  final int departmentId;
-  final String departmentCode;
-  final int degreeId;
-  final String degreeName;
-  final String departmentName;
-  final int currentYear;
-  final String internshipStatus;
+  int candidateId;
+  String candidateName;
+  int departmentId;
+  String departmentCode;
+  int degreeId;
+  String degreeName;
+  String displayPicture;
+  String season;
+  int creditsPoolA;
+  int creditsPoolB;
+  String departmentName;
+  int currentYear;
+  String internshipStatus;
+  BranchRequirementModel branch;
 
   CandidateModel({
     this.candidateId,
@@ -18,7 +25,12 @@ class CandidateModel {
     this.degreeName,
     this.departmentName,
     this.currentYear,
-    this.internshipStatus
+    this.internshipStatus,
+    this.branch,
+    this.season,
+    this.creditsPoolA,
+    this.creditsPoolB,
+    this.displayPicture
   });
 
   factory CandidateModel.fromJson(Map<String, dynamic> json) {
@@ -31,7 +43,11 @@ class CandidateModel {
       degreeName: json['student']['branch']['degree']['name'],
       departmentName: json['student']['branch']['department']['name'],
       currentYear: json['student']['currentYear'],
-      internshipStatus: json['status']
+      internshipStatus: json['status'],
+      season: json['season'],
+      creditsPoolA: json['creditsPoolA'],
+      creditsPoolB: json['creditsPoolB'],
+      branch: BranchRequirementModel.fromJson(json['student']['branch'])
     );
   }
 }

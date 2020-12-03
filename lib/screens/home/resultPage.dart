@@ -5,7 +5,8 @@ import 'package:placement/screens/home/screen_for_results/resultsBranchWise.dart
 import 'package:placement/screens/home/screen_for_results/resultsCompanyWise.dart';
 
 class ResultPage extends StatefulWidget {
-  ResultPage({Key key}) : super(key: key);
+  Map<String, dynamic> args;
+  ResultPage({Key key, this.args}) : super(key: key);
   @override
   _ResultPageState createState() => _ResultPageState();
 }

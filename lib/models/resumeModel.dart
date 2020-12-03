@@ -1,15 +1,17 @@
 class ResumeModel {
-  final int id;
-  final String candidate;
-  final String title;
-  final bool isDefault;
-  final dynamic interests;
-  final dynamic achievements;
-  final String computerLanguages;
-  final String softwarePackages;
-  final String additionalCourses;
-  final String minorCourses;
-  final String languages;
+  int id;
+  String candidate;
+  String title;
+  bool isDefault;
+  bool isVerified;
+  dynamic interests;
+  dynamic achievements;
+  String computerLanguages;
+  String softwarePackages;
+  String additionalCourses;
+  String minorCourses;
+  String languages;
+  String resumeUrl;
 
   ResumeModel({
     this.id,
@@ -22,7 +24,9 @@ class ResumeModel {
     this.softwarePackages,
     this.additionalCourses,
     this.minorCourses,
-    this.languages
+    this.languages,
+    this.isVerified,
+    this.resumeUrl
   });
 
   factory ResumeModel.fromJson(Map<String, dynamic> _data) {
@@ -38,6 +42,7 @@ class ResumeModel {
       additionalCourses: _data['additionalCourses'],
       minorCourses: _data['minorCourses'],
       languages: _data['languages'],
+      isVerified: _data['isVerified']
     );
   }
 }

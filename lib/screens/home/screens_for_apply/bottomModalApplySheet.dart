@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:placement/locator.dart';
 import 'package:placement/models/resumeModel.dart';
 import 'package:placement/resources/endpoints.dart';
 import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/services/api_models/postService.dart';
+import 'package:placement/services/generic/requestService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class BottomModalApplySheet extends StatefulWidget {
@@ -17,7 +20,7 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
 
   var profile;
   var _fetch;
-  PostService _postService;
+  RequestService _requestService;
   List<ResumeModel> _resumeList;
   Future<dynamic> _resumeFuture;
 
@@ -25,7 +28,7 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
   void initState() {
     profile = widget.profile;
     _fetch = FetchService();
-    _postService = PostService();
+    _requestService = locator<RequestService>();
     _resumeList = [];
     _resumeFuture = _giveAppliedResumeList();
     super.initState();
@@ -62,6 +65,7 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
             child: Column(
               children: <Widget>[
                 _headerWidget(index),
+                (snapshot.data[index].isVerified) ? 
                 ListTile(
                   title: Text(snapshot.data[index].title),
                   onTap: () {
@@ -72,13 +76,24 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
                         content: Text("Do you wish to apply using this resume?"),
                         actions: <Widget>[
                           FlatButton(
+                            child: Text("Cancel"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
                             child: Text("Sure"),
                             onPressed: () async {
-                              int _applyPost = await _postService.applyPostService(
+                              Fluttertoast.showToast(
+                                msg: "Processing...",
+                                toastLength: Toast.LENGTH_LONG
+                              );
+                              int _apply = await _requestService.makePostRequest(
+                                EndPoints.HOST + EndPoints.APPLICATIONS,
                                 {
-                                  "profile": profile,
-                                  "resume": snapshot.data[index],
-                                  "cover_letter": null
+                                  "profile": profile.profileId.toString(),
+                                  "resume": snapshot.data[index].id.toString()
+                                  //"cover_letter": null
                                 }
                               );
                               // TODO : handle the response
@@ -86,17 +101,12 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
                               Navigator.of(context).pop();
                             },
                           ),
-                          FlatButton(
-                            child: Text("Cancel"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
                         ],
                       )
                     );
                   },
-                ),
+                ) :
+                Container(),
               ],
             ),
           ),

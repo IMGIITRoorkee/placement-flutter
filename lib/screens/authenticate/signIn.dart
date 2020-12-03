@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
-
+import 'package:placement/resources/endpoints.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:placement/resources/strings.dart';
 import 'package:placement/services/auth/auth_service.dart';
 import 'package:placement/shared/loadingPage.dart';
@@ -76,9 +77,9 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
   }
 
   Widget containsLogin(BuildContext context, double _width, double _height) {
-    return _loading ? LoadingPage() : Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
+      body: _loading ? LoadingPage() : Stack(
         children: <Widget>[
           SafeArea( 
             child: Align(
@@ -165,7 +166,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                 obscureText: _obscurePasswordField,
           ),
         ),
-        SizedBox(height: _height*0.04,),
+        SizedBox(height: 20,),
         ButtonTheme(height: 40.0,
           minWidth: _width*0.60,
           child: RaisedButton(
@@ -174,13 +175,14 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
             child: Text(
               "Log In",
               style: TextStyle(
-                fontSize: 17.0
+                fontSize: 17.0,
+                color: Colors.white
               ),
               ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(7.0)
             ),
-            onPressed: () {
+            onPressed: () async {
               if( _validateUsername() && _validatePassword() ) {
                 setState(() {
                   _loading = ! _loading;
@@ -189,10 +191,27 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                   'username' : _usernameController.text,
                   'password' : _passwordController.text
                 };
-                if(_auth.signInWithEmailPassword(dataMap) == 0) {
-                  return;
+                var res = await _auth.signInWithEmailPassword(dataMap);
+                print("Signed IN!! with $res");
+                if(res == 0) {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/home',(Route<dynamic> route)=>false);
+                } else {
+                  showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (_) => AlertDialog(
+                    content: Text((res == -2) ? "Incorrect Credentials" : "Unable to connect to Server"),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text("OK"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      )
+                    ], 
+                  )
+                );
                 }
-                Navigator.of(context).pushNamedAndRemoveUntil('/home',(Route<dynamic> route)=>false);
                 setState(() {
                   _loading = false ;
                 });
@@ -203,7 +222,6 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
         ),
         SizedBox(height: _height*0.02,),
         Container(
-          width: _width*0.60,
           child: Center(
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -211,11 +229,21 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                 Text(
                   "Having trouble signing in?"
                 ),
-                Text(
-                  " Contact IMG",
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold
+                InkWell(
+                  onTap: () async {
+                    String url = EndPoints.HOST + EndPoints.FORGOT_PASS;
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  },
+                  child: Text(
+                    " Contact IMG",
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
                 ),
               ],
@@ -235,11 +263,11 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
         children: <Widget>[
           Expanded(
             flex: 1,
-            child: Icon(
-              Icons.feedback,
-              size: _width*0.15,
-              color: Colors.blueAccent[200],
-              ),
+            child: Container(
+              width: _width*0.15,
+              height: _width*0.15,
+              child: Image.asset("assets/channeliLogo.png"),
+            ),
           ),
           Expanded(
             flex: 2,
@@ -285,7 +313,7 @@ Widget _lotsOfLove(BuildContext context, double _width,double _height) {
     var isPasswordEmpty = _passwordController.text == null || _passwordController.text == '';
     if(isPasswordEmpty) {
       setState(() {
-        _errorPasswordString = 'Password can not be null';
+        _errorPasswordString = 'Password can not be empty';
       });
     }
     return !isPasswordEmpty;
@@ -295,7 +323,7 @@ Widget _lotsOfLove(BuildContext context, double _width,double _height) {
     var isUsernameEmpty = _usernameController.text == null || _usernameController.text == '';
     if(isUsernameEmpty) {
       setState(() {
-        _errorUsernameString = 'Username can not be null';
+        _errorUsernameString = 'Username can not be empty';
       });
     }
     return !isUsernameEmpty;

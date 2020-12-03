@@ -50,16 +50,17 @@ class _SplashPageState extends State<SplashPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircleAvatar(backgroundColor: Colors.blue,radius: 50.0,child: Icon(Icons.card_travel, size: 40.0, color: Colors.greenAccent,),),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10.0),
+                      Container(
+                        height: 115,
+                        width: 100,
+                        padding: EdgeInsets.only(bottom: 10.0),
+                        child: Image.asset("assets/applogoaspect.png"),
                       ),
                       Text(
                         Strings.PLACEMENT,
                         style: TextStyle(
                           color: Colors.blue,
                           fontSize: 24.0,
-                          //fontWeight: FontWeight.bold
                         ),
                       ),
                     ],

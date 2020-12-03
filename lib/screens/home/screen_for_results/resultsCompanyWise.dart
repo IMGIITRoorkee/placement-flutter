@@ -48,10 +48,12 @@ class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
         }
         return ListView.builder(
           shrinkWrap: true,
+          padding: EdgeInsets.all(0),
           itemCount: snapshot.data.length,
           itemBuilder: (context, index) {
             return Card(
               margin: EdgeInsets.only(bottom: 1),
+              elevation: 0.2,
               child: ListTile(
                 title: Text(
                   snapshot.data[index].companyName,
@@ -91,7 +93,7 @@ class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
   Future<List<CompanyConciseModel>> _futureOfResults(BuildContext context, int yearSelector) async {
     if (!_fetchedResources.resultsCompanyWise['initialised']) {
       var _data = await _fetch.fetchDataService(
-        EndPoints.RESULTS_HOST + EndPoints.YEAR['y'] + EndPoints.RESULTS_COMPANY[0] + EndPoints.WITH_INDEX
+        EndPoints.RESULTS_HOST + EndPoints.RESULTS_COMPANY[0] + EndPoints.WITH_INDEX
       );
       for (var r in _data) {
         _results.add(CompanyConciseModel.fromJson(r));

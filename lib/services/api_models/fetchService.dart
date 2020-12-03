@@ -25,7 +25,7 @@ class FetchService {
 
   Future<dynamic>  fetchDataService(String endPoint) async {
     String _jsonData;
-    Map< String, String> _headers = _auth.fetchHeaderProvider(endPoint);
+    Map< String, String> _headers = await _auth.fetchHeaderProvider(endPoint);
     try {
       var res = await http.get(
         endPoint, 

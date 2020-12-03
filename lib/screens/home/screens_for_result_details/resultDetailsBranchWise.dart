@@ -5,7 +5,7 @@ import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class ResultDetailsBranchWise extends StatefulWidget {
-  final String args;
+  final Map<String, dynamic> args;
   ResultDetailsBranchWise({Key key, this.args}) : super(key: key);
 
   @override
@@ -41,10 +41,12 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
         }
         return ListView.builder(
           shrinkWrap: true,
+          padding: EdgeInsets.all(0),
           itemCount: snapshot.data.length,
           itemBuilder: (context, index) {
             return Card(
               margin: EdgeInsets.only(bottom: 1),
+              elevation: 0.2,
               child: ListTile(
                 title: Text(
                   snapshot.data[index].studentName,
@@ -69,10 +71,15 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
   Future<List<BranchWiseStudentModel>> _futureOfResults(BuildContext context) async {
     List<BranchWiseStudentModel> _results = [];
     var _data = await _fetch.fetchDataService(
-      EndPoints.RESULTS_HOST + widget.args
+      EndPoints.RESULTS_HOST + widget.args['url']
     );
     for (var r in _data) {
       _results.add(BranchWiseStudentModel.fromJson(r));
+    }
+    if(widget.args['sort'] == 1) {
+      _results.sort(
+        (a,b) => a.studentName.compareTo(b.studentName)
+      );
     }
     return _results;
   }
