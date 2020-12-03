@@ -1,11 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:placement/resources/R.dart';
 import 'package:placement/resources/strings.dart';
 import 'package:placement/screens/home/applyPage.dart';
 import 'package:placement/screens/home/calendarPage.dart';
 import 'package:placement/screens/home/candidatePage.dart';
 import 'package:placement/screens/home/resultPage.dart';
+import 'package:placement/services/auth/auth_service.dart';
+import 'package:placement/views/CandidateDetailsView.dart';
+import 'package:placement/views/ResultPageView.dart';
+import 'package:placement/views/calendarView.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -18,6 +23,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   TabController _tabController;
   bool _isCollapsed = true;
+  AuthService _auth;
   
   final List<Tab> _bottomTab = <Tab>[
       Tab(
@@ -41,6 +47,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    _auth = AuthService();
     _tabController = TabController(
       vsync: this,
       length: 4
@@ -74,117 +81,119 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Stack(
       children: <Widget>[
         _homePageScaffold(context),
-        SafeArea(
-          child: Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              child: GestureDetector(
-                onTap: () {
-                  print("tapped!!");
-                },
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 10, 0.0),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.notifications,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/notifs');
-                      },
-                    )
-                  )  
-                ),
-              )
-            ),
-          )
-        ),
-        SafeArea(
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              child: GestureDetector(
-                onTap: () {
-                  print("tapped!!");
-                },
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 10, 0.0),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.menu,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isCollapsed = false;
-                        });
-                      },
-                    )
-                  )  
-                ),
-              )
-            ),
-          )
-        ),
-        Container(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-            child: Container(
-              height: _isCollapsed ? 0 : _height,
-              width:  _isCollapsed ? 0 : _width,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200.withOpacity(0.05)
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          left: 0,
-          child: GestureDetector(
-            onHorizontalDragEnd: (DragEndDetails details) => _onHorizontalDrag(details),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 300),
-              height: _height,
-              width: _isCollapsed ? 0 : _width*0.75,
-              child: _isCollapsed ? Container() :
-              Material(
-                elevation: 8.0,
-                child: Scaffold(
-                  appBar: AppBar(
-                    elevation: 0.0,
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios),
-                        onPressed: () {
-                          setState(() {
-                            _isCollapsed = true;
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                  body: Container(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        if (constraints.maxWidth < 50) {
-                          return Container();
-                        } else {
-                          return menu(context, _height, _width);
-                        }
-                      },
-                    )
-                  ),
-                ),
-              ),
-            ),
-          ),
-        )
+        /// Notifications and Hamburger Menu
+        /// F
+        // SafeArea(
+        //   child: Align(
+        //     alignment: Alignment.topRight,
+        //     child: Container(
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           print("tapped!!");
+        //         },
+        //         child: Padding(
+        //           padding: EdgeInsets.fromLTRB(0.0, 10.0, 10, 0.0),
+        //           child: Material(
+        //             color: Colors.transparent,
+        //             child: IconButton(
+        //               icon: Icon(
+        //                 Icons.notifications,
+        //                 size: 30,
+        //                 color: Colors.white,
+        //               ),
+        //               onPressed: () {
+        //                 Navigator.of(context).pushNamed('/notifs');
+        //               },
+        //             )
+        //           )  
+        //         ),
+        //       )
+        //     ),
+        //   )
+        // ),
+        // SafeArea(
+        //   child: Align(
+        //     alignment: Alignment.topLeft,
+        //     child: Container(
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           print("tapped!!");
+        //         },
+        //         child: Padding(
+        //           padding: EdgeInsets.fromLTRB(0.0, 10.0, 10, 0.0),
+        //           child: Material(
+        //             color: Colors.transparent,
+        //             child: IconButton(
+        //               icon: Icon(
+        //                 Icons.menu,
+        //                 size: 30,
+        //                 color: Colors.white,
+        //               ),
+        //               onPressed: () {
+        //                 setState(() {
+        //                   _isCollapsed = false;
+        //                 });
+        //               },
+        //             )
+        //           )  
+        //         ),
+        //       )
+        //     ),
+        //   )
+        // ),
+        // Container(
+        //   child: BackdropFilter(
+        //     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        //     child: Container(
+        //       height: _isCollapsed ? 0 : _height,
+        //       width:  _isCollapsed ? 0 : _width,
+        //       decoration: BoxDecoration(
+        //         color: Colors.grey.shade200.withOpacity(0.05)
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // Positioned(
+        //   left: 0,
+        //   child: GestureDetector(
+        //     onHorizontalDragEnd: (DragEndDetails details) => _onHorizontalDrag(details),
+        //     child: AnimatedContainer(
+        //       duration: Duration(milliseconds: 300),
+        //       height: _height,
+        //       width: _isCollapsed ? 0 : _width*0.75,
+        //       child: _isCollapsed ? Container() :
+        //       Material(
+        //         elevation: 8.0,
+        //         child: Scaffold(
+        //           appBar: AppBar(
+        //             elevation: 0.0,
+        //             actions: <Widget>[
+        //               IconButton(
+        //                 icon: Icon(Icons.arrow_back_ios),
+        //                 onPressed: () {
+        //                   setState(() {
+        //                     _isCollapsed = true;
+        //                   });
+        //                 },
+        //               )
+        //             ],
+        //           ),
+        //           body: Container(
+        //             child: LayoutBuilder(
+        //               builder: (context, constraints) {
+        //                 if (constraints.maxWidth < 50) {
+        //                   return Container();
+        //                 } else {
+        //                   return menu(context, _height, _width);
+        //                 }
+        //               },
+        //             )
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -212,8 +221,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           controller: _tabController,
           tabs: _bottomTab,
           indicatorPadding: EdgeInsets.all(5.0),
-          indicatorColor: Colors.blueAccent,
-          labelColor: Colors.blueAccent,
+          indicatorColor: R.primaryCol,
+          labelColor: R.primaryCol,
           unselectedLabelColor: Colors.grey,
         )
       )
@@ -226,13 +235,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         child: ApplyPage()
       ),
       Container(
-        child: ResultPage()
+        child: ResultPageView()
       ),
       Container(
-        child: CalendarPage()
+        child: CalendarView()
       ),
       Container(
-        child: CandidatePage()
+        child: CandidateDetailsView()
       ),
     ];
   }
@@ -280,8 +289,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
             leading: Icon(Icons.exit_to_app),
             title: Text("Log Out"),
-            onTap: () {
-              
+            onTap: () async {
+              await _auth.logOut();
+              Navigator.of(context).pushNamedAndRemoveUntil('/wrapper',(Route<dynamic> route)=>false);
             },
           ),
         ],

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:placement/locator.dart';
 
 import 'package:placement/resources/endpoints.dart';
 
@@ -9,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placement/resources/strings.dart';
 import 'package:placement/services/api_models/fetchService.dart';
+import 'package:placement/shared/GlobalCache.dart';
 
 class AuthService {
   FetchService _fetchService;
@@ -32,15 +34,16 @@ class AuthService {
         EndPoints.HOST+EndPoints.LOGIN,
         body: data
       );
+      print("GOT CODE FOR LOGIN ${res.statusCode}");
       if(res.statusCode == 200) {
         jsonData = json.decode(res.body);
-        _encrypt(jsonData["access"], jsonData["refresh"]);
+        await _encrypt(jsonData["access"], jsonData["refresh"]);
         return 0;
       }
-      return null;
+      return -2;
     } catch(e) {
       print(e.toString());
-      return null;
+      return -1;
     }
   }
 
@@ -65,19 +68,28 @@ class AuthService {
     return !(_box.get('access', defaultValue: '') == '');
   }
 
-  dynamic logOut() {
-    _box.delete(Strings.AUTH_BOX);
-    return "Logged Out";
+  dynamic logOut() async {
+    GlobalCache _cache = locator<GlobalCache>();
+    _cache.branchWiseResults = null;
+    _cache.companyWiseResults = null;
+    _cache.filterFields = null;
+    _cache.profilesForMe = null;
+    _cache.profilesOpenForAll = null;
+    _cache.candidateData = null;
+    await _box.delete('access');
+    await _box.delete('refresh');
+    return true;
   }
 
-  _encrypt(String access, String refresh) {
-    _box.put('access', access);
-    _box.put('refresh', refresh);
+  _encrypt(String access, String refresh) async {
+    await _box.put('access', access);
+    await _box.put('refresh', refresh);
   }
 
-  fetchHeaderProvider(String endpoint) {
+  fetchHeaderProvider(String endpoint) async {
+    String _access = await _box.get('access');
     return {
-      'Authorization' : 'Bearer ' + _box.get('access')
+      'Authorization' : 'Bearer ' + _access
     };
   }
 

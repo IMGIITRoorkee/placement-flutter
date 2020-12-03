@@ -4,6 +4,7 @@ import 'package:placement/resources/endpoints.dart';
 import 'package:placement/resources/fetchedResources.dart';
 import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/dataProvider.dart';
+import 'package:placement/shared/hexColor.dart';
 import 'package:placement/shared/loadingPage.dart';
 import 'package:provider/provider.dart';
 
@@ -48,8 +49,10 @@ class _ResultsBranchWiseState extends State<ResultsBranchWise> {
         }
         return ListView.builder(
           itemCount: snapshot.data.length,
+          padding: EdgeInsets.all(0),
           itemBuilder: (context, index) {
             return Card(
+              elevation: 0.2,
               margin: EdgeInsets.only(bottom: 1,top: 0),
               child: ListTile(
                 title: Text(
@@ -78,7 +81,7 @@ class _ResultsBranchWiseState extends State<ResultsBranchWise> {
   Future<List<BranchConciseModel>> _futureOfResults(BuildContext context, int yearSelector) async {
     if (!_fetchedResources.resultsBranchWise['initialised']) {
       var _data = await _fetch.fetchDataService(
-        EndPoints.RESULTS_HOST + EndPoints.YEAR['y'] + EndPoints.RESULTS_BRANCH[yearSelector] + EndPoints.WITH_INDEX
+        EndPoints.RESULTS_HOST + EndPoints.RESULTS_BRANCH[yearSelector] + EndPoints.WITH_INDEX
       );
       for (var r in _data) {
         _results.add(BranchConciseModel.fromJson(r));

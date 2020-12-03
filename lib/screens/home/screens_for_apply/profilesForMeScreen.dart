@@ -33,6 +33,19 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
   @override
   Widget build(BuildContext context) {
     var  _width = MediaQuery.of(context).size.width;
+    return Scaffold(
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        child: Column(
+          children: <Widget>[
+            _applyList(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _applyList(BuildContext context) {
     return Container(
       child: FutureBuilder(
         future: _giveList(context),
@@ -40,9 +53,11 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
           if(snapshot.data == null) {
             return LoadingPage();
           }
+          //return Container(height: 100,width: 100,color: Colors.red,);
           return ListView.builder(
             shrinkWrap: true,
             itemCount: snapshot.data.length,
+            padding: EdgeInsets.all(5),
             itemBuilder: (BuildContext context, int index) {
               String _date =
                 snapshot.data[index].applicationDeadline !=null ?
@@ -77,7 +92,9 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
     );
   }
 
-    Widget _profileStatusIcon(BuildContext context,String status, dynamic profile) {
+
+  Widget _profileStatusIcon(BuildContext context,String status, dynamic profile) {
+    print("STATUS - $status");
     switch (status) {
       case 'branch_not_eligible':
         return IconButton(
@@ -87,7 +104,7 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
               context: context,
               barrierDismissible: true,
               builder: (_) => AlertDialog(
-                content: Text("This Company is Incompatilble with you branch"),
+                content: Text("This Company is incompatible with you branch"),
                 actions: <Widget>[
                   FlatButton(
                     child: Text("OK"),
@@ -125,7 +142,7 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
         break;
       case 'open':
         return IconButton(
-          icon: Icon(Icons.next_week, color: Colors.green,),
+          icon: Icon(Icons.undo, color: Colors.green,),
           onPressed: () {
             showModalBottomSheet(
               context: context,
@@ -149,18 +166,40 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
                 content: Text("Do you wish to withdraw your resume from this Company?"),
                 actions: <Widget>[
                   FlatButton(
-                    child: Text("Sure"),
-                    onPressed: () async {
-                      _deleteService.deleteApplicationService(profile['application']['id']);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
                     child: Text("Cancel"),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                   ),
+                  FlatButton(
+                    child: Text("Sure"),
+                    onPressed: () async {
+                      _deleteService.deleteApplicationService(profile.application.id);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ], 
+              )
+            );
+          },
+        );
+        break;
+      case 'locked':
+        return IconButton(
+          icon: Icon(Icons.lock, color: Colors.grey,),
+          onPressed: () {
+            showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => AlertDialog(
+                content: Text("This Application has been locked"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
                 ], 
               )
             );
@@ -173,7 +212,7 @@ class _ProfilesForMePageState extends State<ProfilesForMePage> {
 
   Future<List<ProfilesModel>>  _giveList(BuildContext context) async {
     if (!_fetchedResources.applyForMe['initialised']) {
-      var _data = await _fetch.fetchDataService(EndPoints.HOST+EndPoints.PROFILES_CLOSED);
+      var _data = await _fetch.fetchDataService(EndPoints.HOST+EndPoints.PROFILES_ME);
       for(var p in _data) {
         _profiles.add(ProfilesModel.fromJson(p));
       }
