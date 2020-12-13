@@ -19,13 +19,22 @@ class CalendarViewModel extends BaseViewModel {
 
   CalendarController get calendarController => _calendarController;
   Map<DateTime, List<CalendarEventModel>> get eventMap => _eventMap;
-  List<CalendarEventModel> get displayEvents => (_displayUpcoming) ? _upcomingEvents : _selectedEvents;
+  List<CalendarEventModel> get displayEvents => (_displayUpcoming) ? _upcomingEvents : _sortedCalendarModel(_selectedEvents);
   bool get displayUpcoming => _displayUpcoming;
 
   @override
   void dispose() { 
     _isDisposed = true;
     super.dispose();
+  }
+
+  List<CalendarEventModel> _sortedCalendarModel(List<CalendarEventModel> unsorted) {
+    unsorted.sort((a,b) {
+      DateTime aDate = DateTime.parse(a.dateTime);
+      DateTime bDate = DateTime.parse(b.dateTime);
+      return aDate.compareTo(bDate);
+    });
+    return unsorted;
   }
 
   void _notif() {
@@ -53,11 +62,7 @@ class CalendarViewModel extends BaseViewModel {
         }
         if(today.isBefore(eveDay)) _upcomingEvents.add(item);
       }
-      _upcomingEvents.sort((a,b) {
-        DateTime aDate = DateTime.parse(a.dateTime);
-        DateTime bDate = DateTime.parse(b.dateTime);
-        return aDate.compareTo(bDate);
-      });
+      _upcomingEvents = _sortedCalendarModel(_upcomingEvents);
       print("UPCOMING! ${_upcomingEvents.length}");
     }
     setIdle();

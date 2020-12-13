@@ -97,7 +97,7 @@ class CalendarView extends StatelessWidget {
       itemCount: model.displayEvents.length,
       itemBuilder: (context, index) {
         CalendarEventModel item = model.displayEvents[index];
-        DateTime dateObject = DateTime.parse(item.dateTime).add(Duration(hours: 5,minutes: 30));
+        DateTime dateObject = DateTime.parse(item.dateTime);
         var date = Jiffy(dateObject);
         String col = model.displayEvents[index].color;
         return Card(
