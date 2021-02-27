@@ -14,6 +14,6 @@ class Strings {
   ];
   
   static const String AUTH_BOX = 'placementAuthBox';
-  static const String FAQ_LINK = "https://internet.channeli.in/placement_and_internship/tpo_forum/";
-  static const String ABOUT_US_LINK = "https://internet.channeli.in/maintainer_site/";
+  static const String FAQ_LINK = "https://channeli.in/placement_and_internship/tpo_forum/";
+  static const String ABOUT_US_LINK = "https://channeli.in/maintainer_site/";
 }
