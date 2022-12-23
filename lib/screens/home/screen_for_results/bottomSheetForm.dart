@@ -55,11 +55,15 @@ class _BottomSheetFormState extends State<BottomSheetForm> {
   }
 
   Widget _filterButton(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      width: size.width,
+      margin: EdgeInsets.symmetric(horizontal: 10),
       child: TextButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.blue),
+          backgroundColor: MaterialStateProperty.all(
+            Theme.of(context).primaryColor,
+          ),
         ),
         child: Text(
           'Get Results',
