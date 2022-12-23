@@ -9,11 +9,11 @@ class ResultDetailsBranchWise extends StatefulWidget {
   ResultDetailsBranchWise({Key key, this.args}) : super(key: key);
 
   @override
-  _ResultDetailsBranchWiseState createState() => _ResultDetailsBranchWiseState();
+  _ResultDetailsBranchWiseState createState() =>
+      _ResultDetailsBranchWiseState();
 }
 
 class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
-  
   var _fetch;
 
   @override
@@ -21,7 +21,7 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
     super.initState();
     _fetch = FetchService();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +36,7 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
     return FutureBuilder(
       future: _futureOfResults(context),
       builder: (context, snapshot) {
-        if(snapshot.data == null) {
+        if (snapshot.data == null) {
           return LoadingPage();
         }
         return ListView.builder(
@@ -50,15 +50,11 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
               child: ListTile(
                 title: Text(
                   snapshot.data[index].studentName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
                   snapshot.data[index].companyName,
-                  style: TextStyle(
-                    height: 1.85
-                  ),
+                  style: TextStyle(height: 1.85),
                 ),
               ),
             );
@@ -68,18 +64,16 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
     );
   }
 
-  Future<List<BranchWiseStudentModel>> _futureOfResults(BuildContext context) async {
+  Future<List<BranchWiseStudentModel>> _futureOfResults(
+      BuildContext context) async {
     List<BranchWiseStudentModel> _results = [];
-    var _data = await _fetch.fetchDataService(
-      EndPoints.RESULTS_HOST + widget.args['url']
-    );
+    var _data = await _fetch
+        .fetchDataService(EndPoints.RESULTS_HOST + widget.args['url']);
     for (var r in _data) {
       _results.add(BranchWiseStudentModel.fromJson(r));
     }
-    if(widget.args['sort'] == 1) {
-      _results.sort(
-        (a,b) => a.studentName.compareTo(b.studentName)
-      );
+    if (widget.args['sort'] == 1) {
+      _results.sort((a, b) => a.studentName.compareTo(b.studentName));
     }
     return _results;
   }

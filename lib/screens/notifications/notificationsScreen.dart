@@ -24,13 +24,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             child: ListTile(
               title: Text(
                 "Notification " + index.toString(),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: Text(
-                "item " + index.toString()
-              ),
+              subtitle: Text("item " + index.toString()),
             ),
           );
         },

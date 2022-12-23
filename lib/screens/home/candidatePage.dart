@@ -5,7 +5,6 @@ import 'package:placement/resources/endpoints.dart';
 import 'package:placement/resources/fetchedResources.dart';
 import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/services/auth/auth_service.dart';
-import 'package:placement/shared/hexColor.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class CandidatePage extends StatefulWidget {
@@ -16,18 +15,18 @@ class CandidatePage extends StatefulWidget {
 }
 
 class _CandidatePageState extends State<CandidatePage> {
-
-    var _fetch;
-    var _fetchedResources;
-    AuthService _auth;
+  var _fetch;
+  var _fetchedResources;
+  AuthService _auth;
 
   @override
   void initState() {
     super.initState();
-    _fetch  = FetchService();
+    _fetch = FetchService();
     _auth = AuthService();
     _fetchedResources = FetchedResources();
   }
+
   @override
   Widget build(BuildContext context) {
     var _width = MediaQuery.of(context).size.width;
@@ -44,8 +43,8 @@ class _CandidatePageState extends State<CandidatePage> {
         constraints: BoxConstraints.expand(),
         child: FutureBuilder(
           future: _giveCandidate(),
-          builder: (context,snapshot) {
-            if(snapshot.data == null) {
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
               return LoadingPage();
             }
             return _profileBody(context, snapshot.data, _width);
@@ -60,15 +59,25 @@ class _CandidatePageState extends State<CandidatePage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SizedBox(height: 30,),
+          SizedBox(
+            height: 30,
+          ),
           _headerAndIcon(context, model, _width),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           _studentInfo(context, model, _width),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           _myApplicationsButton(context, model, _width),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           _myResumesButton(context, model, _width),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           _menu(context, model, _width),
         ],
       ),
@@ -77,7 +86,7 @@ class _CandidatePageState extends State<CandidatePage> {
 
   Widget _menu(BuildContext context, dynamic model, double _width) {
     return Container(
-      width: _width*0.9,
+      width: _width * 0.9,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -85,40 +94,34 @@ class _CandidatePageState extends State<CandidatePage> {
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
             leading: Icon(Icons.help_outline),
-            title: Text("FAQs",
-              style: TextStyle(
-                color: R.textColPrimary
-              ),
+            title: Text(
+              "FAQs",
+              style: TextStyle(color: R.textColPrimary),
             ),
-            onTap: () {
-              
-            },
+            onTap: () {},
           ),
           _divider(),
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
             leading: Icon(Icons.info),
-            title: Text("About Us",
-              style: TextStyle(
-                color: R.textColPrimary
-              ),
+            title: Text(
+              "About Us",
+              style: TextStyle(color: R.textColPrimary),
             ),
-            onTap: () {
-              
-            },
+            onTap: () {},
           ),
           _divider(),
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
             leading: Icon(Icons.exit_to_app),
-            title: Text("Log Out",
-              style: TextStyle(
-                color: R.textColPrimary
-              ),
+            title: Text(
+              "Log Out",
+              style: TextStyle(color: R.textColPrimary),
             ),
             onTap: () async {
               await _auth.logOut();
-              Navigator.of(context).pushNamedAndRemoveUntil('/wrapper',(Route<dynamic> route)=>false);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/wrapper', (Route<dynamic> route) => false);
             },
           ),
           _divider(),
@@ -129,7 +132,7 @@ class _CandidatePageState extends State<CandidatePage> {
 
   Widget _divider() {
     return Divider(
-      color: HexColor("#e6e6e6"),
+      color: Color(0xFFe6e6e6),
       thickness: 1,
       indent: 10,
       height: 0,
@@ -137,7 +140,8 @@ class _CandidatePageState extends State<CandidatePage> {
     );
   }
 
-  Widget _myApplicationsButton(BuildContext context, dynamic model, double _width) {
+  Widget _myApplicationsButton(
+      BuildContext context, dynamic model, double _width) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, '/profileApplied');
@@ -157,24 +161,20 @@ class _CandidatePageState extends State<CandidatePage> {
 
   Widget _button(String heading, double _width) {
     return Container(
-      width: _width*0.9,
+      width: _width * 0.9,
       decoration: BoxDecoration(
-        color: HexColor('#73A1FD').withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10)
-      ),
+          color: Color(0xFF73A1FD).withOpacity(0.1),
+          borderRadius: BorderRadius.circular(10)),
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: <Widget>[
           Expanded(
             flex: 3,
-            child:Container(
+            child: Container(
               padding: EdgeInsets.only(left: 20),
               child: Text(
                 heading,
-                style: TextStyle(
-                  color: HexColor('#878787'),
-                  fontSize: 17
-                ),
+                style: TextStyle(color: Color(0xFF878787), fontSize: 17),
               ),
             ),
           ),
@@ -182,7 +182,7 @@ class _CandidatePageState extends State<CandidatePage> {
             flex: 1,
             child: Icon(
               Icons.arrow_forward_ios,
-              color: HexColor("#73A1FD"),
+              color: Color(0xFF73A1FD),
             ),
           ),
         ],
@@ -192,29 +192,33 @@ class _CandidatePageState extends State<CandidatePage> {
 
   Widget _studentInfo(BuildContext context, dynamic model, double _width) {
     return Container(
-      width: _width*0.9,
+      width: _width * 0.9,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             model.degreeName,
-            style: TextStyle(
-              color: Colors.black54 
-            ),
+            style: TextStyle(color: Colors.black54),
           ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Text(
             model.departmentName,
-            style: TextStyle(
-              color: Colors.black54 
-            ),
+            style: TextStyle(color: Colors.black54),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           _statusRows(model.season + " Status: ", model.internshipStatus),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           _statusRows("Pool A Credits: ", model.creditsPoolA.toString()),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           _statusRows("Pool B Credits: ", model.creditsPoolB.toString()),
         ],
       ),
@@ -228,17 +232,11 @@ class _CandidatePageState extends State<CandidatePage> {
       children: <Widget>[
         Text(
           heading,
-          style: TextStyle(
-            fontSize: 17,
-            color: R.textColPrimary
-          ),
+          style: TextStyle(fontSize: 17, color: R.textColPrimary),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold
-          ),
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -246,7 +244,7 @@ class _CandidatePageState extends State<CandidatePage> {
 
   Widget _headerAndIcon(BuildContext context, dynamic model, double _width) {
     return Container(
-      width: _width*0.9,
+      width: _width * 0.9,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -258,15 +256,15 @@ class _CandidatePageState extends State<CandidatePage> {
                 Icons.account_circle,
                 size: 60,
                 color: Colors.deepPurpleAccent,
-                ),
+              ),
             ),
           ),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Text(
             model.candidateName,
-            style: TextStyle(
-              fontSize: 30
-            ),
+            style: TextStyle(fontSize: 30),
           ),
         ],
       ),
@@ -274,8 +272,9 @@ class _CandidatePageState extends State<CandidatePage> {
   }
 
   Future<CandidateModel> _giveCandidate() async {
-    if(!_fetchedResources.candidateProfile['initialised']) {
-      var _data = await _fetch.fetchDataService(EndPoints.HOST+EndPoints.CANDIDATE);
+    if (!_fetchedResources.candidateProfile['initialised']) {
+      var _data =
+          await _fetch.fetchDataService(EndPoints.HOST + EndPoints.CANDIDATE);
       var _candidate = CandidateModel.fromJson(_data);
       _fetchedResources.setCandidateProfile(_candidate);
       return _candidate;

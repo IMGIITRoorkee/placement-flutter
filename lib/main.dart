@@ -15,11 +15,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: Theme.of(context).copyWith(
-        primaryColor: R.primaryCol
+        primaryColor: R.primaryCol,
+        appBarTheme: AppBarTheme(backgroundColor: R.primaryCol),
       ),
       title: 'Placement',
       initialRoute: '/',
       onGenerateRoute: RouteGeneratorPlacement.getRoutes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

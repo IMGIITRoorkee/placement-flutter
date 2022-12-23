@@ -13,7 +13,6 @@ class WrapperPage extends StatefulWidget {
 }
 
 class _WrapperPageState extends State<WrapperPage> {
-
   AuthService _auth;
   DataProvider data;
   final Duration _duration = Duration(milliseconds: 300);
@@ -33,9 +32,8 @@ class _WrapperPageState extends State<WrapperPage> {
     double _width = _size.width;
     //return _auth.authStateListener() ? HomePage() : Authenticate();
     return ChangeNotifierProvider(
-      create: (context) => DataProvider(),
-      child: _auth.authStateListener() ? HomePage() : Authenticate()
-    );
+        create: (context) => DataProvider(),
+        child: _auth.authStateListener() ? HomePage() : Authenticate());
     // return Scaffold(
     //   //
     //   appBar: AppBar(
@@ -79,30 +77,29 @@ class _WrapperPageState extends State<WrapperPage> {
     // );
     return Container(
       child: AnimatedPositioned(
-        duration: _duration,
-        // top: _isCollapsed ? 0 : 0.2*_height,
-        // bottom: _isCollapsed ? 0 : 0.2*_height,
-        // right: _isCollapsed ? 0 : -0.1*_width,
-        // left: _isCollapsed ? 0 : 0.5*_width,
-        child: Material(
-          animationDuration: _duration,
-          borderRadius: BorderRadius.all(Radius.circular(40.0)),
-          elevation: 8.0,
-          child: Container(
-            color: Colors.red,
-            child: Scaffold(
-              appBar: AppBar(title: Text("test"),),
-              body: Container(
-                color: Colors.blue,
-                height: 200,
-                width: 200,
+          duration: _duration,
+          // top: _isCollapsed ? 0 : 0.2*_height,
+          // bottom: _isCollapsed ? 0 : 0.2*_height,
+          // right: _isCollapsed ? 0 : -0.1*_width,
+          // left: _isCollapsed ? 0 : 0.5*_width,
+          child: Material(
+            animationDuration: _duration,
+            borderRadius: BorderRadius.all(Radius.circular(40.0)),
+            elevation: 8.0,
+            child: Container(
+              color: Colors.red,
+              child: Scaffold(
+                appBar: AppBar(
+                  title: Text("test"),
+                ),
+                body: Container(
+                  color: Colors.blue,
+                  height: 200,
+                  width: 200,
+                ),
               ),
             ),
-          ),
-        )
-      ),
+          )),
     );
   }
-
-  
 }

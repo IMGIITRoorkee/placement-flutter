@@ -26,12 +26,21 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-
+    
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -46,24 +55,24 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        debug {
-            storeFile file('C:/Users/Kshitij Bhardwaj/Documents/keystores/placement/placement.keystore')
-            storePassword 'placement123'
-            keyAlias 'release'
-            keyPassword 'placement123'
-        }
-        release {
-            storeFile file('C:/Users/Kshitij Bhardwaj/Documents/keystores/placement/placement.keystore')
-            storePassword 'placement123'
-            keyAlias 'release'
-            keyPassword 'placement123'
-        }
-    }
+    // signingConfigs {
+    //     debug {
+    //         storeFile file('C:/Users/Kshitij Bhardwaj/Documents/keystores/placement/placement.keystore')
+    //         storePassword 'placement123'
+    //         keyAlias 'release'
+    //         keyPassword 'placement123'
+    //     }
+    //     release {
+    //         storeFile file('C:/Users/Kshitij Bhardwaj/Documents/keystores/placement/placement.keystore')
+    //         storePassword 'placement123'
+    //         keyAlias 'release'
+    //         keyPassword 'placement123'
+    //     }
+    // }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 }

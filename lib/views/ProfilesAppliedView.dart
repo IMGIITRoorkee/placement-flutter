@@ -16,22 +16,24 @@ class ProfilesAppliedView extends StatelessWidget {
     );
   }
 
-  Widget _profilesScaffold(BuildContext context, ProfilesAppliedViewModel model) {
+  Widget _profilesScaffold(
+      BuildContext context, ProfilesAppliedViewModel model) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("My Applications"),
-      ),
-      body: _profilesBody(context, model)
-    );
+        appBar: AppBar(
+          title: Text("My Applications"),
+        ),
+        body: _profilesBody(context, model));
   }
 
   Widget _profilesBody(BuildContext context, ProfilesAppliedViewModel model) {
-    if(model.isLoading) return Center(
-      child: LoadingPage(),
-    );
-    if(model.isEmpty) return Center(
-      child: Text("No Applications found"),
-    );
+    if (model.isLoading)
+      return Center(
+        child: LoadingPage(),
+      );
+    if (model.isEmpty)
+      return Center(
+        child: Text("No Applications found"),
+      );
     return Container(
       constraints: BoxConstraints.expand(),
       child: SingleChildScrollView(
@@ -57,16 +59,14 @@ class ProfilesAppliedView extends StatelessWidget {
           child: ListTile(
             title: Text(
               model.profiles[index].companyName,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                height: 1.5
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, height: 1.5),
             ),
             subtitle: Text(
-              model.profiles[index].application.resume.title + " sent" + ", " + model.profileStatus(index),
-              style: TextStyle(
-                height: 1.85
-              ),
+              model.profiles[index].application.resume.title +
+                  " sent" +
+                  ", " +
+                  model.profileStatus(index),
+              style: TextStyle(height: 1.85),
             ),
           ),
         );

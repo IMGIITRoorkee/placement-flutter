@@ -9,13 +9,12 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-
-  CalendarController _calendarController;
+  // CalendarController _calendarController;
 
   @override
   void initState() {
     super.initState();
-    _calendarController = CalendarController();
+    // _calendarController = CalendarController();
   }
 
   @override
@@ -38,15 +37,28 @@ class _CalendarPageState extends State<CalendarPage> {
       child: Column(
         children: <Widget>[
           TableCalendar(
-            calendarController: _calendarController,
+            focusedDay: DateTime.now(),
+            firstDay: DateTime.now().subtract(
+              const Duration(days: 100),
+            ),
+            lastDay: DateTime.now().add(
+              const Duration(days: 100),
+            ),
             calendarStyle: CalendarStyle(
-              todayColor: Colors.orange,
-              selectedColor: Theme.of(context).primaryColor,
+              todayDecoration: BoxDecoration(
+                color: Colors.orange,
+              ),
+              selectedDecoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
             headerStyle: HeaderStyle(
               formatButtonShowsNext: false,
             ),
           ),
+          // TableCalendar(
+          // calendarController: _calendarController,
+          // ),
         ],
       ),
     );

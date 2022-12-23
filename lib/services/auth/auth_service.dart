@@ -14,34 +14,32 @@ import 'package:placement/shared/GlobalCache.dart';
 
 class AuthService {
   FetchService _fetchService;
-  static final  AuthService _auth = AuthService.internal();
+  static final AuthService _auth = AuthService.internal();
 
   factory AuthService() => _auth;
-  
 
   AuthService.internal() {
     initState();
   }
 
-  void initState() { 
+  void initState() {
     _openEncryptedBox();
   }
+
   var _box;
-  Future<int> signInWithEmailPassword(Map<String,String> data) async {
+  Future<int> signInWithEmailPassword(Map<String, String> data) async {
     var jsonData;
-    try{
-      var res = await http.post(
-        EndPoints.HOST+EndPoints.LOGIN,
-        body: data
-      );
+    try {
+      var res = await http.post(Uri.parse(EndPoints.HOST + EndPoints.LOGIN),
+          body: data);
       print("GOT CODE FOR LOGIN ${res.statusCode}");
-      if(res.statusCode == 200) {
+      if (res.statusCode == 200) {
         jsonData = json.decode(res.body);
         await _encrypt(jsonData["access"], jsonData["refresh"]);
         return 0;
       }
       return -2;
-    } catch(e) {
+    } catch (e) {
       print(e.toString());
       return -1;
     }
@@ -50,18 +48,16 @@ class AuthService {
   Future<void> refreshToken() async {
     var _jsonData;
     String _refresh = _box.get('refresh');
-    try{
+    try {
       var _res = await http.post(
-        EndPoints.HOST + EndPoints.REFRESH,
-        body: {'refresh' : _refresh},
+        Uri.parse(EndPoints.HOST + EndPoints.REFRESH),
+        body: {'refresh': _refresh},
       );
-      if(_res.statusCode == 200) { 
+      if (_res.statusCode == 200) {
         _jsonData = json.decode(_res.body);
         _encryptToken(_jsonData['access']);
       }
-    } catch(e) {
-
-    }
+    } catch (e) {}
   }
 
   bool authStateListener() {
@@ -88,9 +84,7 @@ class AuthService {
 
   fetchHeaderProvider(String endpoint) async {
     String _access = await _box.get('access');
-    return {
-      'Authorization' : 'Bearer ' + _access
-    };
+    return {'Authorization': 'Bearer ' + _access};
   }
 
   _encryptToken(String access) {
@@ -99,9 +93,9 @@ class AuthService {
 
   _openEncryptedBox() async {
     print("initialising box");
-      await Hive.initFlutter();
-      await Hive.openBox(Strings.AUTH_BOX);
-      _box = Hive.box(Strings.AUTH_BOX);
-      refreshToken();
+    await Hive.initFlutter();
+    await Hive.openBox(Strings.AUTH_BOX);
+    _box = Hive.box(Strings.AUTH_BOX);
+    refreshToken();
   }
 }

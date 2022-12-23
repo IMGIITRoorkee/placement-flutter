@@ -9,11 +9,11 @@ class ResultDetailsCompanyWise extends StatefulWidget {
   ResultDetailsCompanyWise({Key key, this.args}) : super(key: key);
 
   @override
-  _ResultDetailsCompanyWiseState createState() => _ResultDetailsCompanyWiseState();
+  _ResultDetailsCompanyWiseState createState() =>
+      _ResultDetailsCompanyWiseState();
 }
 
 class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
-  
   var _fetch;
 
   @override
@@ -21,16 +21,16 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
     super.initState();
     _fetch = FetchService();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
-       child: Scaffold(
-         appBar: AppBar(
-           title: Text("Company Results"),
-         ),
-         body: _companyResults(context),
-       ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Company Results"),
+        ),
+        body: _companyResults(context),
+      ),
     );
   }
 
@@ -38,7 +38,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
     return FutureBuilder(
       future: _futureOfResults(context),
       builder: (context, snapshot) {
-        if(snapshot.data == null) {
+        if (snapshot.data == null) {
           return LoadingPage();
         }
         return ListView.builder(
@@ -52,9 +52,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
               child: ListTile(
                 title: Text(
                   snapshot.data[index].studentName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Container(
                   padding: EdgeInsets.only(bottom: 5),
@@ -64,15 +62,11 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
                     children: <Widget>[
                       Text(
                         snapshot.data[index].studentBranchName,
-                        style: TextStyle(
-                          height: 1.6
-                        ),
+                        style: TextStyle(height: 1.6),
                       ),
                       Text(
                         "Accepted: " + snapshot.data[index].hasAccepted,
-                        style: TextStyle(
-                          height: 1.6
-                        ),
+                        style: TextStyle(height: 1.6),
                       ),
                     ],
                   ),
@@ -85,18 +79,16 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
     );
   }
 
-  Future<List<CompantWiseStudentModel>> _futureOfResults(BuildContext context) async {
+  Future<List<CompantWiseStudentModel>> _futureOfResults(
+      BuildContext context) async {
     List<CompantWiseStudentModel> _results = [];
-    var _data = await _fetch.fetchDataService(
-      EndPoints.RESULTS_HOST + widget.args['url']
-    );
-    for(var r in _data) {
+    var _data = await _fetch
+        .fetchDataService(EndPoints.RESULTS_HOST + widget.args['url']);
+    for (var r in _data) {
       _results.add(CompantWiseStudentModel.fromJson(r));
     }
-    if(widget.args['sort'] == 1) {
-      _results.sort(
-        (a,b) => a.studentName.compareTo(b.studentName)
-      );
+    if (widget.args['sort'] == 1) {
+      _results.sort((a, b) => a.studentName.compareTo(b.studentName));
     }
     return _results;
   }

@@ -24,37 +24,46 @@ class _ProfilePageState extends State<ProfilePage> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Container(
                 color: Colors.blue,
                 height: 200,
                 width: 200,
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Container(
                 color: Colors.blue,
                 height: 200,
                 width: 200,
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Container(
                 color: Colors.blue,
                 height: 200,
                 width: 200,
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Container(
                 color: Colors.blue,
                 height: 200,
                 width: 200,
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Container(
                 color: Colors.blue,
                 height: 200,
                 width: 200,
               ),
-              
             ],
           ),
         ),
