@@ -67,13 +67,15 @@ class _ResultPageViewState extends State<ResultPageView>
                     context: context,
                     isScrollControlled: true,
                     builder: (context) {
-                      return BottomSheetForm(
-                        yearSelectionVariable: model.yearSelectionVariable,
-                        resultTypeVariable: model.resultTypeVariable,
-                        sortVariable: model.sortVariable,
-                        valueChangedForYear: model.selectYear,
-                        valueChangedForResult: model.selectResultType,
-                        valueChangedForSort: model.selectSort,
+                      return SafeArea(
+                        child: BottomSheetForm(
+                          yearSelectionVariable: model.yearSelectionVariable,
+                          resultTypeVariable: model.resultTypeVariable,
+                          sortVariable: model.sortVariable,
+                          valueChangedForYear: model.selectYear,
+                          valueChangedForResult: model.selectResultType,
+                          valueChangedForSort: model.selectSort,
+                        ),
                       );
                     }).then((value) {
                   if (value != null) {

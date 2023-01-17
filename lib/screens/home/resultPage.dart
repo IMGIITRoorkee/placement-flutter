@@ -59,15 +59,17 @@ class _ResultPageState extends State<ResultPage>
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return BottomSheetForm(
-                      yearSelectionVariable: _yearSelectionVariable,
-                      resultTypeVariable: _resultTypeVariable,
-                      valueChangedForYear: (yearSelectionVariable) {
-                        _yearSelectionVariable = yearSelectionVariable;
-                      },
-                      valueChangedForResult: (resultTypeVariable) {
-                        _resultTypeVariable = resultTypeVariable;
-                      },
+                    return SafeArea(
+                      child: BottomSheetForm(
+                        yearSelectionVariable: _yearSelectionVariable,
+                        resultTypeVariable: _resultTypeVariable,
+                        valueChangedForYear: (yearSelectionVariable) {
+                          _yearSelectionVariable = yearSelectionVariable;
+                        },
+                        valueChangedForResult: (resultTypeVariable) {
+                          _resultTypeVariable = resultTypeVariable;
+                        },
+                      ),
                     );
                   },
                 );
