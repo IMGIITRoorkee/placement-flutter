@@ -50,9 +50,23 @@ class ResultsBranchWiseView extends StatelessWidget {
                               height: 1.1,
                               fontSize: 15),
                         ),
-                        subtitle: Text(
-                          "Degree: " + model.branchResults[index].studentDegree,
-                          style: TextStyle(height: 1.85),
+                        // subtitle: Text(
+                        //   "Degree: " + model.branchResults[index].studentDegree,
+                        //   style: TextStyle(height: 1.85),
+                        // ),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Degree: " +  model.branchResults[index].studentDegree,
+                              style: TextStyle(height: 1.85),
+                            ),
+                            Text(
+                              "Selected: " +  model.branchResults[index].studentDegree,
+                              style: TextStyle(height: 1.85),
+                              // textAlign: TextAlign.right,
+                            ),
+                          ],
                         ),
                         onTap: () {
                           Navigator.of(context).pushNamed(
