@@ -62,9 +62,8 @@ class ResultsBranchWiseView extends StatelessWidget {
                               style: TextStyle(height: 1.85),
                             ),
                             Text(
-                              "Selected: " +  model.branchResults[index].studentDegree,
+                              "Selected: " +  model.branchResults[index].selected,
                               style: TextStyle(height: 1.85),
-                              // textAlign: TextAlign.right,
                             ),
                           ],
                         ),
