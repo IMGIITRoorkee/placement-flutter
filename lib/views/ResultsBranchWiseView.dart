@@ -50,16 +50,25 @@ class ResultsBranchWiseView extends StatelessWidget {
                               height: 1.1,
                               fontSize: 15),
                         ),
-                        subtitle: Text(
-                          "Degree: " + model.branchResults[index].studentDegree,
-                          style: TextStyle(height: 1.85),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Degree: " +  model.branchResults[index].studentDegree,
+                              style: TextStyle(height: 1.85),
+                            ),
+                            Text(
+                              "Selected: " +  model.branchResults[index].selected,
+                              style: TextStyle(height: 1.85),
+                            ),
+                          ],
                         ),
                         onTap: () {
                           Navigator.of(context).pushNamed(
                               '/result_details_branchwise',
                               arguments: {
                                 'url':
-                                    model.branchResults[index].studentDetails,
+                                model.branchResults[index].studentDetails,
                                 'sort': sortSwitch
                               });
                         },
@@ -67,6 +76,6 @@ class ResultsBranchWiseView extends StatelessWidget {
                     );
                   },
                 ),
-              );
-  }
+        );
+    }
 }
