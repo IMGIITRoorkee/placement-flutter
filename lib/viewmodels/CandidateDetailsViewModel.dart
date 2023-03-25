@@ -14,7 +14,6 @@ class CandidateDetailsViewModel extends BaseViewModel {
   Future<void> fetchCandidate() async {
     setLoading();
     _candidate = await _applyService.getCandidateProfile();
-    print("Got candi $_candidate");
     setIdle();
   }
 
