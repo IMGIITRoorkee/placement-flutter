@@ -39,14 +39,17 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (overlayEntry.mounted) {
+        if (overlayEntry == null) {
+          return true;
+        } else if (overlayEntry.mounted) {
           await Future.delayed(Duration(milliseconds: 10)).whenComplete(
             () => animationController.reverse(),
           );
           overlayEntry.remove();
           return false;
+        } else {
+          return true;
         }
-        return true;
       },
       child: Container(
         child: Scaffold(
