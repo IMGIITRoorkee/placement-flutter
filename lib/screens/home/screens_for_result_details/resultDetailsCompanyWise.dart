@@ -96,6 +96,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
                 ),
                 title: TextField(
                   maxLines: 1,
+                  cursorColor: Colors.white.withOpacity(0.75),
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -176,7 +177,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
       if (keyword == "") {
         _results = _resultsBackup;
       } else {
-        _results = _results
+        _results = _resultsBackup
             .where((element) => element.studentName.contains(keyword))
             .toList();
       }
