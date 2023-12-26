@@ -1,7 +1,7 @@
-import 'package:placement/shared/hexColor.dart';
+import 'package:flutter/material.dart';
 
 class R {
-  static final primaryCol = HexColor("#73A1FD");
-  static final textColPrimary = HexColor("#878787");
-  static final textColSecondary = HexColor("#1e70bf");
+  static final primaryCol = Color(0xFF73A1FD);
+  static final textColPrimary = Color(0xFF878787);
+  static final textColSecondary = Color(0xFF1e70bf);
 }

@@ -19,39 +19,36 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
   bool _isCollapsed = true;
   AuthService _auth;
-  
+
   final List<Tab> _bottomTab = <Tab>[
-      Tab(
-        icon: Icon(Icons.check_circle),
-        text: 'Apply',
-      ),
-      Tab(
-        icon: Icon(Icons.insert_drive_file),
-        text: 'Results',
-      ),
-      Tab(
-        icon: Icon(Icons.perm_contact_calendar),
-        text: 'Calendar',
-      ),
-      Tab(
-        icon: Icon(Icons.person),
-        text: 'Profile',
-      )
+    Tab(
+      icon: Icon(Icons.check_circle),
+      text: 'Apply',
+    ),
+    Tab(
+      icon: Icon(Icons.insert_drive_file),
+      text: 'Results',
+    ),
+    Tab(
+      icon: Icon(Icons.perm_contact_calendar),
+      text: 'Calendar',
+    ),
+    Tab(
+      icon: Icon(Icons.person),
+      text: 'Profile',
+    )
   ];
 
   @override
   void initState() {
     super.initState();
     _auth = AuthService();
-    _tabController = TabController(
-      vsync: this,
-      length: 4
-    );
+    _tabController = TabController(vsync: this, length: 4);
   }
 
   @override
@@ -61,12 +58,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   void _onHorizontalDrag(DragEndDetails details) {
-    if(details.primaryVelocity == 0) return; // user have just tapped on screen (no dragging)
+    if (details.primaryVelocity == 0)
+      return; // user have just tapped on screen (no dragging)
 
     if (details.primaryVelocity.compareTo(0) == -1)
       setState(() {
         _isCollapsed = true;
-    });
+      });
   }
 
   @override
@@ -81,6 +79,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Stack(
       children: <Widget>[
         _homePageScaffold(context),
+
         /// Notifications and Hamburger Menu
         /// F
         // SafeArea(
@@ -105,7 +104,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         //                 Navigator.of(context).pushNamed('/notifs');
         //               },
         //             )
-        //           )  
+        //           )
         //         ),
         //       )
         //     ),
@@ -135,7 +134,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         //                 });
         //               },
         //             )
-        //           )  
+        //           )
         //         ),
         //       )
         //     ),
@@ -200,49 +199,35 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   Widget _homePageScaffold(BuildContext context) {
     return Scaffold(
-      body: TabBarView(
-        controller: _tabController,
-        children: _tabSelector(),
-      ),
-      bottomNavigationBar: 
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 10.0,
-              spreadRadius: 2.0,
-              offset: Offset(0,-5),
-            ),
-          ]
-        ),
-        child: TabBar(
+        body: TabBarView(
           controller: _tabController,
-          tabs: _bottomTab,
-          indicatorPadding: EdgeInsets.all(5.0),
-          indicatorColor: R.primaryCol,
-          labelColor: R.primaryCol,
-          unselectedLabelColor: Colors.grey,
-        )
-      )
-    );
+          children: _tabSelector(),
+        ),
+        bottomNavigationBar: Container(
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                blurRadius: 10.0,
+                spreadRadius: 2.0,
+                offset: Offset(0, -5),
+              ),
+            ]),
+            child: TabBar(
+              controller: _tabController,
+              tabs: _bottomTab,
+              indicatorPadding: EdgeInsets.all(5.0),
+              indicatorColor: R.primaryCol,
+              labelColor: R.primaryCol,
+              unselectedLabelColor: Colors.grey,
+            )));
   }
 
   List<Widget> _tabSelector() {
     return <Widget>[
-      Container(
-        child: ApplyPage()
-      ),
-      Container(
-        child: ResultPageView()
-      ),
-      Container(
-        child: CalendarView()
-      ),
-      Container(
-        child: CandidateDetailsView()
-      ),
+      Container(child: ApplyPage()),
+      Container(child: ResultPageView()),
+      Container(child: CalendarView()),
+      Container(child: CandidateDetailsView()),
     ];
   }
 
@@ -257,7 +242,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             child: Center(
               child: Icon(
                 Icons.arrow_drop_down_circle,
-                size: 40,  
+                size: 40,
               ),
             ),
           ),
@@ -265,25 +250,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
             leading: Icon(Icons.format_list_bulleted),
             title: Text("Resume list"),
-            onTap: () {
-              
-            },
+            onTap: () {},
           ),
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
             leading: Icon(Icons.help_outline),
             title: Text("FAQs"),
-            onTap: () {
-              
-            },
+            onTap: () {},
           ),
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
             leading: Icon(Icons.info),
             title: Text("About Us"),
-            onTap: () {
-              
-            },
+            onTap: () {},
           ),
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
@@ -291,7 +270,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             title: Text("Log Out"),
             onTap: () async {
               await _auth.logOut();
-              Navigator.of(context).pushNamedAndRemoveUntil('/wrapper',(Route<dynamic> route)=>false);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/wrapper', (Route<dynamic> route) => false);
             },
           ),
         ],

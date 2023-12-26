@@ -5,29 +5,25 @@ import 'package:placement/screens/home/screen_for_results/resultsBranchWise.dart
 import 'package:placement/screens/home/screen_for_results/resultsCompanyWise.dart';
 
 class ResultPage extends StatefulWidget {
-  Map<String, dynamic> args;
-  ResultPage({Key key, this.args}) : super(key: key);
+  final Map<String, dynamic> args;
+  const ResultPage({Key key, this.args}) : super(key: key);
   @override
   _ResultPageState createState() => _ResultPageState();
 }
 
-
-class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateMixin {
-
+class _ResultPageState extends State<ResultPage>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
   int _yearSelectionVariable;
-  int _resultTypeVariable; 
+  int _resultTypeVariable;
 
-    @override
+  @override
   void initState() {
     super.initState();
     _yearSelectionVariable = 0;
     _resultTypeVariable = 0;
-    _tabController = TabController(
-      vsync: this,
-      length: 2
-    );
+    _tabController = TabController(vsync: this, length: 2);
     _scrollController = ScrollController();
   }
 
@@ -45,7 +41,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
     Tab(
       text: Strings.RESULT_TABBAR[1],
     ),
-  ]; 
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -63,17 +59,20 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return BottomSheetForm(
-                      yearSelectionVariable: _yearSelectionVariable,
-                      resultTypeVariable: _resultTypeVariable,
-                      valueChangedForYear: (yearSelectionVariable) {
-                        _yearSelectionVariable = yearSelectionVariable;
-                      },
-                      valueChangedForResult: (resultTypeVariable) {
-                        _resultTypeVariable = resultTypeVariable;
-                      }
+                    return SafeArea(
+                      child: BottomSheetForm(
+                        yearSelectionVariable: _yearSelectionVariable,
+                        resultTypeVariable: _resultTypeVariable,
+                        valueChangedForYear: (yearSelectionVariable) {
+                          _yearSelectionVariable = yearSelectionVariable;
+                        },
+                        valueChangedForResult: (resultTypeVariable) {
+                          _resultTypeVariable = resultTypeVariable;
+                        },
+                      ),
                     );
-                  });
+                  },
+                );
               },
               child: Icon(Icons.filter_b_and_w),
             ),
@@ -117,8 +116,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       indicatorPadding: EdgeInsets.only(top: 10),
       indicatorColor: Colors.white,
       indicatorWeight: 6.0,
-      onTap: (index) {
-      },
+      onTap: (index) {},
     );
   }
 }

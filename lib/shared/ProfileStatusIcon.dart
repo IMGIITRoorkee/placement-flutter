@@ -6,67 +6,76 @@ class ProfileStatusIcon extends StatelessWidget {
   final String status;
   final dynamic profile;
   final dynamic model;
-  const ProfileStatusIcon({Key key, this.status, this.profile, this.model}) : super(key: key);
+  const ProfileStatusIcon({Key key, this.status, this.profile, this.model})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     switch (status) {
       case 'branch_not_eligible':
         return IconButton(
-          icon: Icon(Icons.highlight_off,color: Colors.red,),
+          icon: Icon(
+            Icons.highlight_off,
+            color: Colors.red,
+          ),
           onPressed: () {
             showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (_) => AlertDialog(
-                content: Text("This Company is incompatible with you branch"),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ], 
-              )
-            );
+                context: context,
+                barrierDismissible: true,
+                builder: (_) => AlertDialog(
+                      content:
+                          Text("This Company is incompatible with you branch"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ));
           },
         );
         break;
       case 'expired':
         return IconButton(
-          icon: Icon(Icons.highlight_off, color: Colors.red,),
+          icon: Icon(
+            Icons.highlight_off,
+            color: Colors.red,
+          ),
           onPressed: () {
             showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (_) => AlertDialog(
-                content: Text("This Deadline for application has expired"),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ], 
-              )
-            );
+                context: context,
+                barrierDismissible: true,
+                builder: (_) => AlertDialog(
+                      content:
+                          Text("This Deadline for application has expired"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ));
           },
         );
         break;
       case 'open':
         return IconButton(
-          icon: Icon(Icons.send, color: Colors.green,),
+          icon: Icon(
+            Icons.send,
+            color: Colors.green,
+          ),
           onPressed: () {
             showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return BottomModalApplySheet(
-                  profile: profile,
-                );
-              }
-            ).then((value) {
+                context: context,
+                builder: (context) {
+                  return BottomModalApplySheet(
+                    profile: profile,
+                  );
+                }).then((value) {
               print("APPLIED!!");
               model.refresh();
             });
@@ -75,56 +84,63 @@ class ProfileStatusIcon extends StatelessWidget {
         break;
       case 'withdrawable':
         return IconButton(
-          icon: Icon(Icons.undo, color: R.primaryCol,),
+          icon: Icon(
+            Icons.undo,
+            color: R.primaryCol,
+          ),
           onPressed: () {
             showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (_) => AlertDialog(
-                content: Text("Do you wish to withdraw your resume from this Company?"),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("Cancel"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Sure"),
-                    onPressed: () async {
-                      await model.deleteApplication(profile.application.id);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ], 
-              )
-            );
+                context: context,
+                barrierDismissible: true,
+                builder: (_) => AlertDialog(
+                      content: Text(
+                          "Do you wish to withdraw your resume from this Company?"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text("Sure"),
+                          onPressed: () async {
+                            await model
+                                .deleteApplication(profile.application.id);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ));
           },
         );
         break;
       case 'locked':
         return IconButton(
-          icon: Icon(Icons.lock, color: Colors.grey,),
+          icon: Icon(
+            Icons.lock,
+            color: Colors.grey,
+          ),
           onPressed: () {
             showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (_) => AlertDialog(
-                content: Text("This Application has been locked"),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ], 
-              )
-            );
+                context: context,
+                barrierDismissible: true,
+                builder: (_) => AlertDialog(
+                      content: Text("This Application has been locked"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ));
           },
         );
         break;
-      default:return Icon(Icons.signal_cellular_connected_no_internet_4_bar);
+      default:
+        return Icon(Icons.signal_cellular_connected_no_internet_4_bar);
     }
   }
 }

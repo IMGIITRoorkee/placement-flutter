@@ -9,14 +9,13 @@ import 'package:provider/provider.dart';
 
 class ResultsCompanyWise extends StatefulWidget {
   bool resultType;
-  ResultsCompanyWise({Key key,this.resultType}) : super(key: key);
+  ResultsCompanyWise({Key key, this.resultType}) : super(key: key);
 
   @override
   _ResultsCompanyWiseState createState() => _ResultsCompanyWiseState();
 }
 
 class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
-
   var _fetch;
   var _fetchedResources;
   List<CompanyConciseModel> _results = [];
@@ -24,17 +23,15 @@ class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
   @override
   void initState() {
     super.initState();
-    _fetch  = FetchService();
+    _fetch = FetchService();
     _fetchedResources = FetchedResources();
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(
-      builder: (context,data,child) {
-        return Container(
-          child: _resultDisplay(context,data.yearSelector)
-        );
+      builder: (context, data, child) {
+        return Container(child: _resultDisplay(context, data.yearSelector));
       },
     );
   }
@@ -43,7 +40,7 @@ class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
     return FutureBuilder(
       future: _futureOfResults(context, yearSelector),
       builder: (context, snapshot) {
-        if(snapshot.data == null) {
+        if (snapshot.data == null) {
           return LoadingPage();
         }
         return ListView.builder(
@@ -59,28 +56,26 @@ class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
                   snapshot.data[index].companyName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                  ),  
+                  ),
                 ),
                 subtitle: Wrap(
                   children: <Widget>[
                     Text(
                       "Selected: ",
-                      style: TextStyle(
-                        height: 1.85
-                      ),
+                      style: TextStyle(height: 1.85),
                     ),
                     Text(
                       snapshot.data[index].selected,
                       style: TextStyle(
-                        height: 1.85,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold
-                      ),
+                          height: 1.85,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed('/result_details_companywise',arguments: snapshot.data[index].detail);
+                  Navigator.of(context).pushNamed('/result_details_companywise',
+                      arguments: snapshot.data[index].detail);
                 },
               ),
             );
@@ -90,11 +85,12 @@ class _ResultsCompanyWiseState extends State<ResultsCompanyWise> {
     );
   }
 
-  Future<List<CompanyConciseModel>> _futureOfResults(BuildContext context, int yearSelector) async {
+  Future<List<CompanyConciseModel>> _futureOfResults(
+      BuildContext context, int yearSelector) async {
     if (!_fetchedResources.resultsCompanyWise['initialised']) {
-      var _data = await _fetch.fetchDataService(
-        EndPoints.RESULTS_HOST + EndPoints.RESULTS_COMPANY[0] + EndPoints.WITH_INDEX
-      );
+      var _data = await _fetch.fetchDataService(EndPoints.RESULTS_HOST +
+          EndPoints.RESULTS_COMPANY[0] +
+          EndPoints.WITH_INDEX);
       for (var r in _data) {
         _results.add(CompanyConciseModel.fromJson(r));
       }

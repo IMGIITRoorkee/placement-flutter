@@ -6,16 +6,14 @@ import 'package:placement/shared/GlobalCache.dart';
 
 class BottomSheetForm extends StatefulWidget {
   BottomSheetForm(
-    {
-      Key key,
+      {Key key,
       this.yearSelectionVariable,
       this.resultTypeVariable,
       this.sortVariable,
       this.valueChangedForYear,
       this.valueChangedForResult,
-      this.valueChangedForSort
-    }
-  ) : super(key: key);
+      this.valueChangedForSort})
+      : super(key: key);
   final int yearSelectionVariable;
   final int resultTypeVariable;
   final int sortVariable;
@@ -28,7 +26,6 @@ class BottomSheetForm extends StatefulWidget {
 }
 
 class _BottomSheetFormState extends State<BottomSheetForm> {
-
   int yearSelectionVariable;
   int resultTypeVariable;
   int sortVariable;
@@ -58,22 +55,29 @@ class _BottomSheetFormState extends State<BottomSheetForm> {
   }
 
   Widget _filterButton(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
-      child: RaisedButton(
-        color: Theme.of(context).primaryColor,
-        padding: EdgeInsets.symmetric(
-          horizontal: 40,
-          vertical: 15
+      width: size.width,
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      child: TextButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            Theme.of(context).primaryColor,
+          ),
         ),
         child: Text(
           'Get Results',
-          style: TextStyle(
-            color: Colors.white
-          ),
+          style: TextStyle(color: Colors.white),
         ),
         onPressed: () {
-          Navigator.pop(context, {'year' : yearSelectionVariable, 'type' : resultTypeVariable, 'sort' : sortVariable});
+          Navigator.pop(
+            context,
+            {
+              'year': yearSelectionVariable,
+              'type': resultTypeVariable,
+              'sort': sortVariable
+            },
+          );
         },
       ),
     );
@@ -83,16 +87,18 @@ class _BottomSheetFormState extends State<BottomSheetForm> {
     return Card(
       child: Column(
         children: <Widget>[
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             "Select Year",
-            style: TextStyle(
-              color: R.textColPrimary
-            ),
+            style: TextStyle(color: R.textColPrimary),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Column(
-            children: ModelResources.yearOptions().map( (year) {
+            children: ModelResources.yearOptions().map((year) {
               return RadioListTile(
                 groupValue: yearSelectionVariable,
                 value: year.key,
@@ -100,7 +106,7 @@ class _BottomSheetFormState extends State<BottomSheetForm> {
                 onChanged: (val) {
                   _setYear(val);
                 },
-              ); 
+              );
             }).toList(),
           ),
         ],
@@ -113,14 +119,16 @@ class _BottomSheetFormState extends State<BottomSheetForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             "Sort By",
-            style: TextStyle(
-              color: R.textColPrimary
-            ),
+            style: TextStyle(color: R.textColPrimary),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Column(
             children: ModelResources.SORT_OPTIONS.map((resultType) {
               return RadioListTile(
@@ -143,14 +151,16 @@ class _BottomSheetFormState extends State<BottomSheetForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             "Select Results type",
-            style: TextStyle(
-              color: R.textColPrimary
-            ),
+            style: TextStyle(color: R.textColPrimary),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Column(
             children: ModelResources.RESULT_OPTIONS.map((resultType) {
               return RadioListTile(

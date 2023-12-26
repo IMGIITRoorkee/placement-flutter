@@ -11,19 +11,15 @@ class ApplyPage extends StatefulWidget {
   _ApplyPageState createState() => _ApplyPageState();
 }
 
-
-class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMixin {
-
+class _ApplyPageState extends State<ApplyPage>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
 
-    @override
+  @override
   void initState() {
     super.initState();
-    _tabController = TabController(
-      vsync: this,
-      length: 2
-    );
+    _tabController = TabController(vsync: this, length: 2);
     _scrollController = ScrollController();
   }
 
@@ -41,7 +37,7 @@ class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMix
     Tab(
       text: Strings.APPLY_TABBAR[1],
     ),
-  ]; 
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +78,7 @@ class _ApplyPageState extends State<ApplyPage> with SingleTickerProviderStateMix
       indicatorPadding: EdgeInsets.only(top: 10),
       indicatorColor: Colors.white,
       indicatorWeight: 6.0,
-      onTap: (index) {
-        
-      },
+      onTap: (index) {},
     );
   }
 }

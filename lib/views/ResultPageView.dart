@@ -14,21 +14,18 @@ class ResultPageView extends StatefulWidget {
   _ResultPageViewState createState() => _ResultPageViewState();
 }
 
-class _ResultPageViewState extends State<ResultPageView> with SingleTickerProviderStateMixin {
-
+class _ResultPageViewState extends State<ResultPageView>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
   void initState() {
-    _tabController = TabController(
-      vsync: this,
-      length: 2
-    );
+    _tabController = TabController(vsync: this, length: 2);
     super.initState();
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     _tabController.dispose();
     super.dispose();
   }
@@ -41,10 +38,9 @@ class _ResultPageViewState extends State<ResultPageView> with SingleTickerProvid
       text: Strings.RESULT_TABBAR[1],
     ),
   ];
-  
+
   @override
   Widget build(BuildContext context) {
-
     final double _width = MediaQuery.of(context).size.width;
 
     return BaseView<ResultPageViewModel>(
@@ -55,7 +51,8 @@ class _ResultPageViewState extends State<ResultPageView> with SingleTickerProvid
     );
   }
 
-  Widget _resultStack(BuildContext context, ResultPageViewModel model, double _width) {
+  Widget _resultStack(
+      BuildContext context, ResultPageViewModel model, double _width) {
     return Stack(
       children: <Widget>[
         _resultsView(context, model),
@@ -67,21 +64,23 @@ class _ResultPageViewState extends State<ResultPageView> with SingleTickerProvid
               backgroundColor: R.primaryCol,
               onPressed: () {
                 showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) {
-                    return BottomSheetForm(
-                      yearSelectionVariable: model.yearSelectionVariable,
-                      resultTypeVariable: model.resultTypeVariable,
-                      sortVariable: model.sortVariable,
-                      valueChangedForYear: model.selectYear,
-                      valueChangedForResult: model.selectResultType,
-                      valueChangedForSort: model.selectSort,
-                    );
-                  }
-                ).then((value) {
-                  if(value != null) {
-                    model.setFields(value['year'], value['type'], value['sort']);
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) {
+                      return SafeArea(
+                        child: BottomSheetForm(
+                          yearSelectionVariable: model.yearSelectionVariable,
+                          resultTypeVariable: model.resultTypeVariable,
+                          sortVariable: model.sortVariable,
+                          valueChangedForYear: model.selectYear,
+                          valueChangedForResult: model.selectResultType,
+                          valueChangedForSort: model.selectSort,
+                        ),
+                      );
+                    }).then((value) {
+                  if (value != null) {
+                    model.setFields(
+                        value['year'], value['type'], value['sort']);
                   }
                 });
               },
@@ -115,12 +114,12 @@ class _ResultPageViewState extends State<ResultPageView> with SingleTickerProvid
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           ResultsBranchWiseView(
-            yearSelector : model.yearSelectionVariable,
+            yearSelector: model.yearSelectionVariable,
             internSwitch: model.resultTypeVariable,
             sortSwitch: model.sortVariable,
           ),
           ResultsCompanyWiseView(
-            yearSelector : model.yearSelectionVariable,
+            yearSelector: model.yearSelectionVariable,
             internSwitch: model.resultTypeVariable,
             sortSwitch: model.sortVariable,
           ),
@@ -137,8 +136,7 @@ class _ResultPageViewState extends State<ResultPageView> with SingleTickerProvid
       indicatorPadding: EdgeInsets.only(top: 10),
       indicatorColor: Colors.white,
       indicatorWeight: 6.0,
-      onTap: (index) {
-      },
+      onTap: (index) {},
     );
   }
 }

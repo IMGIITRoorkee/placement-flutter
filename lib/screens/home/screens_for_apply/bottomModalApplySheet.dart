@@ -9,15 +9,14 @@ import 'package:placement/services/generic/requestService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class BottomModalApplySheet extends StatefulWidget {
-  BottomModalApplySheet({Key key,this.profile}) : super(key: key);
-  final profile; 
+  BottomModalApplySheet({Key key, this.profile}) : super(key: key);
+  final profile;
 
   @override
   _BottomModalApplySheetState createState() => _BottomModalApplySheetState();
 }
 
 class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
-
   var profile;
   var _fetch;
   RequestService _requestService;
@@ -38,23 +37,24 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
   Widget build(BuildContext context) {
     var _width = MediaQuery.of(context).size.width;
     return Container(
-       child: FutureBuilder(
-         future: _resumeFuture,
-         builder: (BuildContext context, AsyncSnapshot snapshot) {
+      child: FutureBuilder(
+        future: _resumeFuture,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return Container(
-              width: _width*0.9,
+              width: _width * 0.9,
               height: 200,
               child: LoadingPage(),
             );
           }
           return _listOfResume(context, _width, snapshot);
-         },
-       ),
+        },
+      ),
     );
   }
 
-  Widget _listOfResume(BuildContext context, double _width, AsyncSnapshot snapshot) {
+  Widget _listOfResume(
+      BuildContext context, double _width, AsyncSnapshot snapshot) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: snapshot.data.length, //snapshot.data.length,
@@ -65,48 +65,57 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
             child: Column(
               children: <Widget>[
                 _headerWidget(index),
-                (snapshot.data[index].isVerified) ? 
-                ListTile(
-                  title: Text(snapshot.data[index].title),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) => AlertDialog(
-                        content: Text("Do you wish to apply using this resume?"),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text("Cancel"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          FlatButton(
-                            child: Text("Sure"),
-                            onPressed: () async {
-                              Fluttertoast.showToast(
-                                msg: "Processing...",
-                                toastLength: Toast.LENGTH_LONG
-                              );
-                              int _apply = await _requestService.makePostRequest(
-                                EndPoints.HOST + EndPoints.APPLICATIONS,
-                                {
-                                  "profile": profile.profileId.toString(),
-                                  "resume": snapshot.data[index].id.toString()
-                                  //"cover_letter": null
-                                }
-                              );
-                              // TODO : handle the response
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
+                (snapshot.data[index].isVerified)
+                    ? ListTile(
+                        title: Text(snapshot.data[index].title),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => AlertDialog(
+                              content: Text(
+                                "Do you wish to apply using this resume?",
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text("Cancel"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      Colors.blue,
+                                    ),
+                                  ),
+                                  child: Text("Sure"),
+                                  onPressed: () async {
+                                    Fluttertoast.showToast(
+                                        msg: "Processing...",
+                                        toastLength: Toast.LENGTH_LONG);
+                                    int _apply = await _requestService
+                                        .makePostRequest(
+                                            EndPoints.HOST +
+                                                EndPoints.APPLICATIONS,
+                                            {
+                                          "profile":
+                                              profile.profileId.toString(),
+                                          "resume":
+                                              snapshot.data[index].id.toString()
+                                          //"cover_letter": null
+                                        });
+                                    // TODO : handle the response
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       )
-                    );
-                  },
-                ) :
-                Container(),
+                    : Container(),
               ],
             ),
           ),
@@ -129,7 +138,8 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
   }
 
   Future<dynamic> _giveAppliedResumeList() async {
-    var _data = await _fetch.fetchDataService(EndPoints.HOST+EndPoints.CANDIDATE_RESUME_LIST);
+    var _data = await _fetch
+        .fetchDataService(EndPoints.HOST + EndPoints.CANDIDATE_RESUME_LIST);
     for (var r in _data) {
       _resumeList.add(ResumeModel.fromJson(r));
     }

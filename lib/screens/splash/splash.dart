@@ -14,102 +14,98 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-
   AuthService _auth;
-
 
   @override
   void initState() {
     super.initState();
     _auth = AuthService();
     Timer(Duration(seconds: 2), () {
-      Navigator.of(context).pushNamedAndRemoveUntil('/wrapper',(Route<dynamic> route)=>false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/wrapper', (Route<dynamic> route) => false);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-    
+
     return Material(
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-              ),
+        child: Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
           ),
-          Column(
-            children: <Widget>[
-              Expanded(
-                flex: 6,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        height: 115,
-                        width: 100,
-                        padding: EdgeInsets.only(bottom: 10.0),
-                        child: Image.asset("assets/applogoaspect.png"),
+        ),
+        Column(
+          children: <Widget>[
+            Expanded(
+              flex: 6,
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: 115,
+                      width: 100,
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Image.asset("assets/applogoaspect.png"),
+                    ),
+                    Text(
+                      Strings.PLACEMENT,
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 24.0,
                       ),
-                      Text(
-                        Strings.PLACEMENT,
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 24.0,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
+            ),
+            Expanded(
                 flex: 1,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     LoadingPage(),
                   ],
-                )
+                )),
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Made With ",
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                      Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      ),
+                      Text(
+                        " by IMG",
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Made With ",
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                        Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                          ),
-                        Text(
-                          " by IMG",
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ],
-      )
-    );
+            )
+          ],
+        ),
+      ],
+    ));
   }
 }
