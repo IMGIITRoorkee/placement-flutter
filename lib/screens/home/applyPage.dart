@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:placement/resources/R.dart';
 import 'package:placement/resources/strings.dart';
 import 'package:placement/screens/home/screens_for_apply/profilesForAllScreen.dart';
 import 'package:placement/screens/home/screens_for_apply/profilesForMeScreen.dart';
@@ -6,15 +7,15 @@ import 'package:placement/views/ProfilesForAllView.dart';
 import 'package:placement/views/ProfilesForMeView.dart';
 
 class ApplyPage extends StatefulWidget {
-  ApplyPage({Key key}) : super(key: key);
+  ApplyPage({Key? key}) : super(key: key);
   @override
   _ApplyPageState createState() => _ApplyPageState();
 }
 
 class _ApplyPageState extends State<ApplyPage>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  ScrollController _scrollController;
+  late TabController _tabController;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
@@ -70,7 +71,7 @@ class _ApplyPageState extends State<ApplyPage>
     );
   }
 
-  Widget _profilesListPage(BuildContext context) {
+  PreferredSizeWidget _profilesListPage(BuildContext context) {
     return TabBar(
       controller: _tabController,
       tabs: _profileTabs,

@@ -57,7 +57,7 @@ class CalendarViewModel extends BaseViewModel {
         }
         DateTime createDay = DateTime(eveDay.year, eveDay.month, eveDay.day);
         if (_eventMap[createDay] != null) {
-          _eventMap[createDay].add(item);
+          _eventMap[createDay]!.add(item);
         } else {
           _eventMap[createDay] = [item];
         }
@@ -69,7 +69,7 @@ class CalendarViewModel extends BaseViewModel {
     setIdle();
   }
 
-  void onSelect(List<dynamic> _seEvents) {
+  void onSelect(List<CalendarEventModel> _seEvents) {
     if (_seEvents != null && _seEvents.length > 0) {
       _selectedEvents = _seEvents;
       _displayUpcoming = false;

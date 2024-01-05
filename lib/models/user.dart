@@ -4,5 +4,9 @@ class User {
   final String sugars;
   final int strength;
 
-  User({this.uid,this.name,this.sugars,this.strength});
+  User(
+      {required this.uid,
+      required this.name,
+      required this.sugars,
+      required this.strength});
 }

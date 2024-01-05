@@ -3,11 +3,10 @@ class SelectedStudentModel {
   final String studentBranchName;
   final int studentEnrolmentNumber;
 
-  SelectedStudentModel({
-    this.studentName,
-    this.studentBranchName,
-    this.studentEnrolmentNumber
-  });
+  SelectedStudentModel(
+      {required this.studentName,
+      required this.studentBranchName,
+      required this.studentEnrolmentNumber});
 
   factory SelectedStudentModel.fromJson(Map<String, dynamic> _json) {
     return SelectedStudentModel(
@@ -15,5 +14,5 @@ class SelectedStudentModel {
       studentEnrolmentNumber: _json[''],
       studentName: _json[''],
     );
-  } 
+  }
 }

@@ -7,7 +7,7 @@ import 'package:placement/views/baseView.dart';
 
 class CompanyDetailView extends StatelessWidget {
   final Map<String, dynamic> args;
-  const CompanyDetailView({Key key, this.args}) : super(key: key);
+  const CompanyDetailView({Key? key, required this.args}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

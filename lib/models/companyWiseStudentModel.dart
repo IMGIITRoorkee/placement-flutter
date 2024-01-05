@@ -7,25 +7,23 @@ class CompantWiseStudentModel {
   final String studentEmail;
   final String hasAccepted;
 
-  CompantWiseStudentModel({
-    this.studentEnrolmentNumber,
-    this.studentName,
-    this.studentBranchName,
-    this.studentDegree,
-    this.studentContactNo,
-    this.studentEmail,
-    this.hasAccepted
-  });
+  CompantWiseStudentModel(
+      {required this.studentEnrolmentNumber,
+      required this.studentName,
+      required this.studentBranchName,
+      required this.studentDegree,
+      required this.studentContactNo,
+      required this.studentEmail,
+      required this.hasAccepted});
 
   factory CompantWiseStudentModel.fromJson(Map<String, dynamic> _json) {
     return CompantWiseStudentModel(
-      studentEnrolmentNumber: _json['studentEnrolmentNumber'] ?? '',
-      studentName: _json['studentName'] ?? '',
-      studentBranchName: _json['studentBranchName'] ?? '',
-      studentDegree: _json['studentDegree'] ?? '',
-      studentContactNo: _json['studentContactNo'] ?? '',
-      studentEmail: _json['studentEmail'] ?? '',
-      hasAccepted: _json['hasAccepted'] ?? ''
-    );
+        studentEnrolmentNumber: _json['studentEnrolmentNumber'] ?? '',
+        studentName: _json['studentName'] ?? '',
+        studentBranchName: _json['studentBranchName'] ?? '',
+        studentDegree: _json['studentDegree'] ?? '',
+        studentContactNo: _json['studentContactNo'] ?? '',
+        studentEmail: _json['studentEmail'] ?? '',
+        hasAccepted: _json['hasAccepted'] ?? '');
   }
 }

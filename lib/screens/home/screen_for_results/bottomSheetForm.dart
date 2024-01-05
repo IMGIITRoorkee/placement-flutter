@@ -6,10 +6,10 @@ import 'package:placement/shared/GlobalCache.dart';
 
 class BottomSheetForm extends StatefulWidget {
   BottomSheetForm(
-      {Key key,
-      this.yearSelectionVariable,
-      this.resultTypeVariable,
-      this.sortVariable,
+      {Key? key,
+      required this.yearSelectionVariable,
+      required this.resultTypeVariable,
+      required this.sortVariable,
       this.valueChangedForYear,
       this.valueChangedForResult,
       this.valueChangedForSort})
@@ -26,9 +26,9 @@ class BottomSheetForm extends StatefulWidget {
 }
 
 class _BottomSheetFormState extends State<BottomSheetForm> {
-  int yearSelectionVariable;
-  int resultTypeVariable;
-  int sortVariable;
+  late int yearSelectionVariable;
+  late int resultTypeVariable;
+  late int sortVariable;
   GlobalCache _cache = locator<GlobalCache>();
 
   @override

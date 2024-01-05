@@ -7,7 +7,10 @@ import 'package:placement/views/baseView.dart';
 class ResultsCompanyWiseView extends StatelessWidget {
   final int yearSelector, internSwitch, sortSwitch;
   const ResultsCompanyWiseView(
-      {Key key, this.yearSelector, this.internSwitch, this.sortSwitch})
+      {Key? key,
+      required this.yearSelector,
+      required this.internSwitch,
+      required this.sortSwitch})
       : super(key: key);
 
   @override
@@ -39,14 +42,14 @@ class ResultsCompanyWiseView extends StatelessWidget {
                 child: ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.all(0),
-                  itemCount: model.companyResults.length,
+                  itemCount: model.companyResults!.length,
                   itemBuilder: (context, index) {
                     return Card(
                       margin: EdgeInsets.only(bottom: 1),
                       elevation: 0.3,
                       child: ListTile(
                         title: Text(
-                          model.companyResults[index].companyName,
+                          model.companyResults![index].companyName,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               height: 1.1,
@@ -59,7 +62,7 @@ class ResultsCompanyWiseView extends StatelessWidget {
                               style: TextStyle(height: 1.85),
                             ),
                             Text(
-                              model.companyResults[index].selected,
+                              model.companyResults![index].selected,
                               style: TextStyle(
                                   height: 1.85,
                                   color: R.primaryCol,
@@ -71,7 +74,7 @@ class ResultsCompanyWiseView extends StatelessWidget {
                           Navigator.of(context).pushNamed(
                               '/result_details_companywise',
                               arguments: {
-                                'url': model.companyResults[index].detail,
+                                'url': model.companyResults![index].detail,
                                 'sort': model.sortSwitch
                               });
                         },

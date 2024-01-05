@@ -8,7 +8,7 @@ import 'package:placement/services/auth/auth_service.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class CandidatePage extends StatefulWidget {
-  CandidatePage({Key key}) : super(key: key);
+  CandidatePage({required Key key}) : super(key: key);
 
   @override
   _CandidatePageState createState() => _CandidatePageState();
@@ -17,7 +17,7 @@ class CandidatePage extends StatefulWidget {
 class _CandidatePageState extends State<CandidatePage> {
   var _fetch;
   var _fetchedResources;
-  AuthService _auth;
+  late AuthService _auth;
 
   @override
   void initState() {

@@ -9,10 +9,8 @@ import 'package:placement/shared/loadingPage.dart';
 import 'package:provider/provider.dart';
 
 class ResultsBranchWise extends StatefulWidget {
-  final int yearSelectionVariable;
   const ResultsBranchWise({
-    Key key,
-    this.yearSelectionVariable,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -41,14 +39,15 @@ class _ResultsBranchWiseState extends State<ResultsBranchWise> {
   }
 
   Widget _resultDisplay(BuildContext context, int yearSelector) {
-    return FutureBuilder(
+    return FutureBuilder<List<BranchConciseModel>>(
       future: _futureOfResults(context, yearSelector),
       builder: (context, snapshot) {
         if (snapshot.data == null) {
           return LoadingPage();
         }
+
         return ListView.builder(
-          itemCount: snapshot.data.length,
+          itemCount: snapshot.data!.length,
           padding: EdgeInsets.all(0),
           itemBuilder: (context, index) {
             return Card(
@@ -56,18 +55,18 @@ class _ResultsBranchWiseState extends State<ResultsBranchWise> {
               margin: EdgeInsets.only(bottom: 1, top: 0),
               child: ListTile(
                 title: Text(
-                  snapshot.data[index].studentBranchName,
+                  snapshot.data![index].studentBranchName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  "Degree: " + snapshot.data[index].studentDegree,
+                  "Degree: " + snapshot.data![index].studentDegree,
                   style: TextStyle(height: 1.85),
                 ),
                 onTap: () {
                   Navigator.of(context).pushNamed('/result_details_branchwise',
-                      arguments: snapshot.data[index].studentDetails);
+                      arguments: snapshot.data![index].studentDetails);
                 },
               ),
             );

@@ -6,17 +6,17 @@ import 'package:placement/screens/home/screen_for_results/resultsCompanyWise.dar
 
 class ResultPage extends StatefulWidget {
   final Map<String, dynamic> args;
-  const ResultPage({Key key, this.args}) : super(key: key);
+  const ResultPage({required Key key, required this.args}) : super(key: key);
   @override
   _ResultPageState createState() => _ResultPageState();
 }
 
 class _ResultPageState extends State<ResultPage>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  ScrollController _scrollController;
-  int _yearSelectionVariable;
-  int _resultTypeVariable;
+  late TabController _tabController;
+  late ScrollController _scrollController;
+  late int _yearSelectionVariable;
+  late int _resultTypeVariable;
 
   @override
   void initState() {
@@ -61,6 +61,7 @@ class _ResultPageState extends State<ResultPage>
                   builder: (context) {
                     return SafeArea(
                       child: BottomSheetForm(
+                        sortVariable: 0,
                         yearSelectionVariable: _yearSelectionVariable,
                         resultTypeVariable: _resultTypeVariable,
                         valueChangedForYear: (yearSelectionVariable) {
@@ -108,7 +109,7 @@ class _ResultPageState extends State<ResultPage>
     );
   }
 
-  Widget _resultsListPage(BuildContext context) {
+  PreferredSizeWidget _resultsListPage(BuildContext context) {
     return TabBar(
       controller: _tabController,
       tabs: _profileTabs,

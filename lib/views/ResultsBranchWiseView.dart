@@ -6,7 +6,10 @@ import 'package:placement/views/baseView.dart';
 class ResultsBranchWiseView extends StatelessWidget {
   final int yearSelector, internSwitch, sortSwitch;
   const ResultsBranchWiseView(
-      {Key key, this.yearSelector, this.internSwitch, this.sortSwitch})
+      {Key? key,
+      required this.yearSelector,
+      required this.internSwitch,
+      required this.sortSwitch})
       : super(key: key);
 
   @override
@@ -36,7 +39,7 @@ class ResultsBranchWiseView extends StatelessWidget {
             : RefreshIndicator(
                 onRefresh: model.refreshResults,
                 child: ListView.builder(
-                  itemCount: model.branchResults.length,
+                  itemCount: model.branchResults!.length,
                   padding: EdgeInsets.all(0),
                   itemBuilder: (context, index) {
                     return Card(
@@ -44,7 +47,7 @@ class ResultsBranchWiseView extends StatelessWidget {
                       margin: EdgeInsets.only(bottom: 1, top: 0),
                       child: ListTile(
                         title: Text(
-                          model.branchResults[index].studentBranchName,
+                          model.branchResults![index].studentBranchName,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               height: 1.1,
@@ -54,11 +57,13 @@ class ResultsBranchWiseView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Degree: " +  model.branchResults[index].studentDegree,
+                              "Degree: " +
+                                  model.branchResults![index].studentDegree,
                               style: TextStyle(height: 1.85),
                             ),
                             Text(
-                              "Selected: " +  model.branchResults[index].selected,
+                              "Selected: " +
+                                  model.branchResults![index].selected,
                               style: TextStyle(height: 1.85),
                             ),
                           ],
@@ -68,7 +73,7 @@ class ResultsBranchWiseView extends StatelessWidget {
                               '/result_details_branchwise',
                               arguments: {
                                 'url':
-                                model.branchResults[index].studentDetails,
+                                    model.branchResults![index].studentDetails,
                                 'sort': sortSwitch
                               });
                         },
@@ -76,6 +81,6 @@ class ResultsBranchWiseView extends StatelessWidget {
                     );
                   },
                 ),
-        );
-    }
+              );
+  }
 }

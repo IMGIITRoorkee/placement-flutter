@@ -4,7 +4,7 @@ import 'package:placement/viewmodels/ResumeListViewModel.dart';
 import 'package:placement/views/baseView.dart';
 
 class ResumeListView extends StatelessWidget {
-  const ResumeListView({Key key}) : super(key: key);
+  const ResumeListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

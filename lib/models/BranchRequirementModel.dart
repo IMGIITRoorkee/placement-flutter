@@ -2,20 +2,17 @@ import 'package:placement/models/DegreeModel.dart';
 import 'package:placement/models/DepartmentModel.dart';
 
 class BranchRequirementModel {
-  
   int id;
-  String code,
-    name;
+  String code, name;
   DegreeModel degree;
   DepartmentModel department;
 
-  BranchRequirementModel({
-    this.code,
-    this.degree,
-    this.department,
-    this.id,
-    this.name
-   });
+  BranchRequirementModel(
+      {required this.code,
+      required this.degree,
+      required this.department,
+      required this.id,
+      required this.name});
 
   factory BranchRequirementModel.fromJson(Map<String, dynamic> json) {
     return BranchRequirementModel(

@@ -9,7 +9,7 @@ import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class ProfilesForMePage extends StatefulWidget {
-  ProfilesForMePage({Key key}) : super(key: key);
+  ProfilesForMePage({required Key key}) : super(key: key);
 
   @override
   _ProfilesForMePageState createState() => _ProfilesForMePageState();

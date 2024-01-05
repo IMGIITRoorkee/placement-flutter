@@ -11,7 +11,7 @@ import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class ProfilesForAllPage extends StatefulWidget {
-  ProfilesForAllPage({Key key}) : super(key: key);
+  ProfilesForAllPage({required Key key}) : super(key: key);
 
   @override
   _ProfilesForAllPageState createState() => _ProfilesForAllPageState();

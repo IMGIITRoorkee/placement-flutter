@@ -4,7 +4,7 @@ import 'package:placement/viewmodels/ProfilesAppliedViewModel.dart';
 import 'package:placement/views/baseView.dart';
 
 class ProfilesAppliedView extends StatelessWidget {
-  const ProfilesAppliedView({Key key}) : super(key: key);
+  const ProfilesAppliedView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

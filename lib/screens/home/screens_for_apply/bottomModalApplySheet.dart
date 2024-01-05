@@ -9,7 +9,7 @@ import 'package:placement/services/generic/requestService.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class BottomModalApplySheet extends StatefulWidget {
-  BottomModalApplySheet({Key key, this.profile}) : super(key: key);
+  BottomModalApplySheet({Key? key, this.profile}) : super(key: key);
   final profile;
 
   @override
@@ -19,9 +19,9 @@ class BottomModalApplySheet extends StatefulWidget {
 class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
   var profile;
   var _fetch;
-  RequestService _requestService;
-  List<ResumeModel> _resumeList;
-  Future<dynamic> _resumeFuture;
+  late RequestService _requestService;
+  late List<ResumeModel> _resumeList;
+  late Future<dynamic> _resumeFuture;
 
   @override
   void initState() {

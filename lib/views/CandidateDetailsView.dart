@@ -8,7 +8,7 @@ import 'package:placement/viewmodels/CandidateDetailsViewModel.dart';
 import 'package:placement/views/baseView.dart';
 
 class CandidateDetailsView extends StatelessWidget {
-  const CandidateDetailsView({Key key}) : super(key: key);
+  const CandidateDetailsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

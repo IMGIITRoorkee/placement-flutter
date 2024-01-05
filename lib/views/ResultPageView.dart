@@ -8,7 +8,7 @@ import 'package:placement/views/ResultsCompanyWiseView.dart';
 import 'package:placement/views/baseView.dart';
 
 class ResultPageView extends StatefulWidget {
-  ResultPageView({Key key}) : super(key: key);
+  ResultPageView({Key? key}) : super(key: key);
 
   @override
   _ResultPageViewState createState() => _ResultPageViewState();
@@ -16,7 +16,7 @@ class ResultPageView extends StatefulWidget {
 
 class _ResultPageViewState extends State<ResultPageView>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -128,15 +128,19 @@ class _ResultPageViewState extends State<ResultPageView>
     );
   }
 
-  Widget _resultsListPage(BuildContext context, ResultPageViewModel model) {
-    return TabBar(
-      controller: _tabController,
-      tabs: _profileTabs,
-      unselectedLabelColor: Colors.white70,
-      indicatorPadding: EdgeInsets.only(top: 10),
-      indicatorColor: Colors.white,
-      indicatorWeight: 6.0,
-      onTap: (index) {},
+  PreferredSizeWidget _resultsListPage(
+      BuildContext context, ResultPageViewModel model) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(kToolbarHeight),
+      child: TabBar(
+        controller: _tabController,
+        tabs: _profileTabs,
+        unselectedLabelColor: Colors.white70,
+        indicatorPadding: EdgeInsets.only(top: 10),
+        indicatorColor: Colors.white,
+        indicatorWeight: 6.0,
+        onTap: (index) {},
+      ),
     );
   }
 }

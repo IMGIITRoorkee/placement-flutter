@@ -12,8 +12,7 @@ import 'package:placement/views/baseView.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarView extends StatefulWidget {
-  final Map<String, dynamic> args;
-  const CalendarView({Key key, this.args}) : super(key: key);
+  const CalendarView({Key? key}) : super(key: key);
 
   @override
   State<CalendarView> createState() => _CalendarViewState();
@@ -21,7 +20,7 @@ class CalendarView extends StatefulWidget {
 
 class _CalendarViewState extends State<CalendarView> {
   DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay;
+  DateTime _selectedDay = DateTime.now();
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -58,6 +57,7 @@ class _CalendarViewState extends State<CalendarView> {
     final LinkedHashMap events = LinkedHashMap<DateTime, dynamic>(
         equals: isSameDay, hashCode: getHashCode)
       ..addAll(model.eventMap);
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -81,15 +81,17 @@ class _CalendarViewState extends State<CalendarView> {
               formatButtonShowsNext: false,
             ),
             eventLoader: (day) {
-              return events[day];
+              return events[day] ?? [];
             },
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             onDaySelected: (selectedDay, focusedDay) {
+              print(selectedDay);
+              print(focusedDay);
               if (!isSameDay(_selectedDay, selectedDay)) {
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
-                  model.onSelect(events[_selectedDay]);
+                  model.onSelect(events[_selectedDay] ?? []);
                 });
               }
             },
