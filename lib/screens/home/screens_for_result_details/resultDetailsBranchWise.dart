@@ -163,7 +163,9 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
         _results = _resultsBackup;
       } else {
         _results = _resultsBackup!
-            .where((element) => element.studentName.contains(keyword))
+            .where((element) => element.studentName
+                .toLowerCase()
+                .contains(keyword.toLowerCase()))
             .toList();
       }
     });
@@ -176,6 +178,7 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
     List<BranchWiseStudentModel> _studentResults = [];
     var _data = await _fetch
         .fetchDataService(EndPoints.RESULTS_HOST + widget.args['url']);
+
     for (var r in _data) {
       _studentResults.add(BranchWiseStudentModel.fromJson(r));
     }

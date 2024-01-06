@@ -178,7 +178,9 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
         _results = _resultsBackup;
       } else {
         _results = _resultsBackup!
-            .where((element) => element.studentName.contains(keyword))
+            .where((element) => element.studentName
+                .toLowerCase()
+                .contains(keyword.toLowerCase()))
             .toList();
       }
     });

@@ -41,11 +41,13 @@ class ApplyService {
     if (_cache.candidateData == null) {
       var _data = await _requestService
           .makeGetRequest(EndPoints.HOST + EndPoints.CANDIDATE);
+
       if (_data != -1 && _data != -2) {
         CandidateModel candidate = CandidateModel.fromJson(_data);
         print("CANDI = $candidate");
         var _profilePic = await _requestService
             .makeGetRequest(EndPoints.HOST + EndPoints.WHOAMI);
+
         if (_profilePic != -1 && _profilePic != -2) {
           candidate.displayPicture =
               EndPoints.HOST + _profilePic['displayPicture'].toString();

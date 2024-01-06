@@ -89,7 +89,10 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
                                       Colors.blue,
                                     ),
                                   ),
-                                  child: Text("Sure"),
+                                  child: Text(
+                                    "Sure",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                   onPressed: () async {
                                     Fluttertoast.showToast(
                                         msg: "Processing...",

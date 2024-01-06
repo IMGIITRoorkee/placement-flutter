@@ -296,16 +296,17 @@ class CandidateDetailsView extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   ),
                 ),
-                CachedNetworkImage(
-                  imageUrl: model.displayPicture,
-                  placeholder: _imagePlaceHolder,
-                  imageBuilder: (context, imageProvider) {
-                    return CircleAvatar(
-                      backgroundImage: imageProvider,
-                      radius: 30,
-                    );
-                  },
-                ),
+                if (model.displayPicture != "https://channeli.innull")
+                  CachedNetworkImage(
+                    imageUrl: model.displayPicture,
+                    placeholder: _imagePlaceHolder,
+                    imageBuilder: (context, imageProvider) {
+                      return CircleAvatar(
+                        backgroundImage: imageProvider,
+                        radius: 30,
+                      );
+                    },
+                  ),
               ],
             ),
           ),
