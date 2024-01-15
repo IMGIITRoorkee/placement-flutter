@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleview;
-  SignIn({this.toggleview});
+  SignIn({required this.toggleview});
 
   @override
   _SignInState createState() => _SignInState();
@@ -21,18 +21,18 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
 
   final _formKey = GlobalKey<FormState>();
 
-  AnimationController _controller;
-  Animation<double> _growAnimation;
+  late AnimationController _controller;
+  late Animation<double> _growAnimation;
 
-  AnimationController _controllerForm;
-  Animation<double> _growAnimationForm;
+  late AnimationController _controllerForm;
+  late Animation<double> _growAnimationForm;
 
   var _obscurePasswordField = true;
 
   var _errorPasswordString;
   var _errorUsernameString;
 
-  AuthService _auth;
+  late AuthService _auth;
   bool _loading = false;
 
   bool _keyboardIsVisible() {

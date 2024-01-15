@@ -6,7 +6,8 @@ class ProfileStatusIcon extends StatelessWidget {
   final String status;
   final dynamic profile;
   final dynamic model;
-  const ProfileStatusIcon({Key key, this.status, this.profile, this.model})
+  const ProfileStatusIcon(
+      {Key? key, required this.status, this.profile, this.model})
       : super(key: key);
 
   @override

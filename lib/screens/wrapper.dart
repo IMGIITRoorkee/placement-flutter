@@ -6,15 +6,15 @@ import 'package:placement/services/auth/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class WrapperPage extends StatefulWidget {
-  WrapperPage({Key key}) : super(key: key);
+  WrapperPage({Key? key}) : super(key: key);
 
   @override
   _WrapperPageState createState() => _WrapperPageState();
 }
 
 class _WrapperPageState extends State<WrapperPage> {
-  AuthService _auth;
-  DataProvider data;
+  late AuthService _auth;
+  late DataProvider data;
   final Duration _duration = Duration(milliseconds: 300);
   bool _isCollapsed = false;
 

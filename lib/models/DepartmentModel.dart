@@ -1,19 +1,11 @@
 class DepartmentModel {
   int id;
-  String code,
-    name;
+  String code, name;
 
-  DepartmentModel({
-    this.code,
-    this.id,
-    this.name
-  });
+  DepartmentModel({required this.code, required this.id, required this.name});
 
   factory DepartmentModel.fromJson(Map<String, dynamic> json) {
     return DepartmentModel(
-      code: json['code'] ?? "",
-      id: json['id'],
-      name: json['name'] ?? ""
-    );
+        code: json['code'] ?? "", id: json['id'], name: json['name'] ?? "");
   }
 }

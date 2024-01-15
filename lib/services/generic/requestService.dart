@@ -9,6 +9,7 @@ class RequestService {
 
   Future makeGetRequest(String endpoint) async {
     dynamic _headers = await _auth.fetchHeaderProvider(endpoint);
+
     print(endpoint);
     print(_headers);
     try {

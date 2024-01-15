@@ -7,14 +7,14 @@ import 'package:placement/services/auth/auth_service.dart';
 import 'package:placement/shared/loadingPage.dart';
 
 class SplashPage extends StatefulWidget {
-  SplashPage({Key key}) : super(key: key);
+  SplashPage({Key? key}) : super(key: key);
 
   @override
   _SplashPageState createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
-  AuthService _auth;
+  late AuthService _auth;
 
   @override
   void initState() {

@@ -6,7 +6,7 @@ import 'package:placement/shared/loadingPage.dart';
 
 class ResultDetailsCompanyWise extends StatefulWidget {
   final Map<String, dynamic> args;
-  ResultDetailsCompanyWise({Key key, this.args}) : super(key: key);
+  ResultDetailsCompanyWise({Key? key, required this.args}) : super(key: key);
 
   @override
   _ResultDetailsCompanyWiseState createState() =>
@@ -16,11 +16,11 @@ class ResultDetailsCompanyWise extends StatefulWidget {
 class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
     with SingleTickerProviderStateMixin {
   var _fetch;
-  List<CompantWiseStudentModel> _results;
-  List<CompantWiseStudentModel> _resultsBackup;
-  AnimationController animationController;
-  Animation<double> animation;
-  OverlayEntry overlayEntry;
+  List<CompantWiseStudentModel>? _results;
+  List<CompantWiseStudentModel>? _resultsBackup;
+  late AnimationController animationController;
+  late Animation<double> animation;
+  OverlayEntry? overlayEntry;
 
   @override
   void initState() {
@@ -41,11 +41,11 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
       onWillPop: () async {
         if (overlayEntry == null) {
           return true;
-        } else if (overlayEntry.mounted) {
+        } else if (overlayEntry!.mounted) {
           await Future.delayed(Duration(milliseconds: 10)).whenComplete(
             () => animationController.reverse(),
           );
-          overlayEntry.remove();
+          overlayEntry!.remove();
           return false;
         } else {
           return true;
@@ -91,7 +91,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
                         .whenComplete(
                       () => animationController.reverse(),
                     );
-                    overlayEntry.remove();
+                    overlayEntry!.remove();
                   },
                 ),
                 title: TextField(
@@ -119,7 +119,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
       overlayState.setState(() {});
     });
     // inserting overlay entry
-    overlayState.insert(overlayEntry);
+    overlayState.insert(overlayEntry!);
     animationController.forward();
   }
 
@@ -130,12 +130,12 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
         if (snapshot.data == null) {
           return LoadingPage();
         }
-        if (_results.isEmpty) {
+        if (_results!.isEmpty) {
           return Center(child: Text("Looks there's no one with that name :("));
         }
 
         return ListView.builder(
-          itemCount: _results.length,
+          itemCount: _results!.length,
           padding: EdgeInsets.all(0),
           shrinkWrap: true,
           itemBuilder: (context, index) {
@@ -144,7 +144,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
               elevation: 0.2,
               child: ListTile(
                 title: Text(
-                  _results[index].studentName,
+                  _results![index].studentName,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Container(
@@ -154,11 +154,11 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        _results[index].studentBranchName,
+                        _results![index].studentBranchName,
                         style: TextStyle(height: 1.6),
                       ),
                       Text(
-                        "Accepted: " + _results[index].hasAccepted,
+                        "Accepted: " + _results![index].hasAccepted,
                         style: TextStyle(height: 1.6),
                       ),
                     ],
@@ -177,15 +177,17 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
       if (keyword == "") {
         _results = _resultsBackup;
       } else {
-        _results = _resultsBackup
-            .where((element) => element.studentName.contains(keyword))
+        _results = _resultsBackup!
+            .where((element) => element.studentName
+                .toLowerCase()
+                .contains(keyword.toLowerCase()))
             .toList();
       }
     });
   }
 
   Future<String> _futureOfResults(BuildContext context) async {
-    if (_results != null && _results.length >= 0) return "Success!";
+    if (_results != null && _results!.length >= 0) return "Success!";
 
     List<CompantWiseStudentModel> _studentResults = [];
     var _data = await _fetch
@@ -196,8 +198,10 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
     if (widget.args['sort'] == 1) {
       _studentResults.sort((a, b) => a.studentName.compareTo(b.studentName));
     }
-    _results = _studentResults;
-    _resultsBackup = _results;
+    setState(() {
+      _results = _studentResults;
+      _resultsBackup = _results;
+    });
 
     return "Success!";
   }

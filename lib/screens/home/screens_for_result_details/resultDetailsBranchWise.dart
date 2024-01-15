@@ -6,7 +6,7 @@ import 'package:placement/shared/loadingPage.dart';
 
 class ResultDetailsBranchWise extends StatefulWidget {
   final Map<String, dynamic> args;
-  ResultDetailsBranchWise({Key key, this.args}) : super(key: key);
+  ResultDetailsBranchWise({Key? key, required this.args}) : super(key: key);
 
   @override
   _ResultDetailsBranchWiseState createState() =>
@@ -16,11 +16,11 @@ class ResultDetailsBranchWise extends StatefulWidget {
 class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
     with SingleTickerProviderStateMixin {
   var _fetch;
-  List<BranchWiseStudentModel> _results;
-  List<BranchWiseStudentModel> _resultsBackup;
-  AnimationController animationController;
-  Animation<double> animation;
-  OverlayEntry overlayEntry;
+  List<BranchWiseStudentModel>? _results;
+  List<BranchWiseStudentModel>? _resultsBackup;
+  late AnimationController animationController;
+  late Animation<double> animation;
+  OverlayEntry? overlayEntry;
 
   @override
   void initState() {
@@ -41,11 +41,11 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
       onWillPop: () async {
         if (overlayEntry == null) {
           return true;
-        } else if (overlayEntry.mounted) {
+        } else if (overlayEntry!.mounted) {
           await Future.delayed(Duration(milliseconds: 10)).whenComplete(
             () => animationController.reverse(),
           );
-          overlayEntry.remove();
+          overlayEntry!.remove();
           return false;
         } else {
           return true;
@@ -90,7 +90,7 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
                       () => animationController.reverse(),
                     );
                     animationController.reverse();
-                    overlayEntry.remove();
+                    overlayEntry!.remove();
                   },
                 ),
                 title: TextField(
@@ -118,7 +118,7 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
       overlayState.setState(() {});
     });
     // inserting overlay entry
-    overlayState.insert(overlayEntry);
+    overlayState.insert(overlayEntry!);
     animationController.forward();
   }
 
@@ -129,24 +129,24 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
         if (snapshot.data == null) {
           return LoadingPage();
         }
-        if (_results.isEmpty) {
+        if (_results!.isEmpty) {
           return Center(child: Text("Looks there's no one with that name :("));
         }
         return ListView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.all(0),
-          itemCount: _results.length,
+          itemCount: _results!.length,
           itemBuilder: (context, index) {
             return Card(
               margin: EdgeInsets.only(bottom: 1),
               elevation: 0.2,
               child: ListTile(
                 title: Text(
-                  _results[index].studentName,
+                  _results![index].studentName,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  _results[index].companyName,
+                  _results![index].companyName,
                   style: TextStyle(height: 1.85),
                 ),
               ),
@@ -162,28 +162,33 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
       if (keyword == "") {
         _results = _resultsBackup;
       } else {
-        _results = _resultsBackup
-            .where((element) => element.studentName.contains(keyword))
+        _results = _resultsBackup!
+            .where((element) => element.studentName
+                .toLowerCase()
+                .contains(keyword.toLowerCase()))
             .toList();
       }
     });
   }
 
   Future<String> _futureOfResults(BuildContext context) async {
-    if (_results != null && _results.length >= 0) return "Success!";
+    print(_results);
+    if (_results != null && _results!.length >= 0) return "Success!";
 
     List<BranchWiseStudentModel> _studentResults = [];
     var _data = await _fetch
         .fetchDataService(EndPoints.RESULTS_HOST + widget.args['url']);
+
     for (var r in _data) {
       _studentResults.add(BranchWiseStudentModel.fromJson(r));
     }
     if (widget.args['sort'] == 1) {
       _studentResults.sort((a, b) => a.studentName.compareTo(b.studentName));
     }
-
-    _results = _studentResults;
-    _resultsBackup = _results;
+    setState(() {
+      _results = _studentResults;
+      _resultsBackup = _results;
+    });
 
     return "Success!";
   }

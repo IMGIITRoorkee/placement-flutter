@@ -1,48 +1,38 @@
 class FetchedResources {
-
   static final FetchedResources _fetchedResources = FetchedResources.internal();
   factory FetchedResources() => _fetchedResources;
 
-  Map<String, dynamic> _resultsBranchWise;
+  Map<String, dynamic> _resultsBranchWise = {
+    'initialised': false,
+    'data': null
+  };
   get resultsBranchWise => _resultsBranchWise;
 
-  Map<String, dynamic> _resultsCompanyWise;
+  Map<String, dynamic> _resultsCompanyWise = {
+    'initialised': false,
+    'data': null
+  };
   get resultsCompanyWise => _resultsCompanyWise;
 
-  Map<String, dynamic> _applyForAll;
+  Map<String, dynamic> _applyForAll = {'initialised': false, 'data': null};
   get applyForAll => _applyForAll;
 
-  Map<String, dynamic> _applyForMe;
+  Map<String, dynamic> _applyForMe = {'initialised': false, 'data': null};
   get applyForMe => _applyForMe;
 
-  Map<String, dynamic> _candidateProfile;
+  Map<String, dynamic> _candidateProfile = {'initialised': false, 'data': null};
   get candidateProfile => _candidateProfile;
-  
+
   FetchedResources.internal() {
     initState();
   }
 
   void initState() {
-    _resultsBranchWise = {
-      'initialised' : false,
-      'data' : null
-    };
-    _resultsCompanyWise = {
-      'initialised' : false,
-      'data' : null
-    };
-    _applyForMe = {
-      'initialised' : false,
-      'data' : null
-    };
-    _applyForAll = {
-      'initialised' : false,
-      'data' : null
-    };
-    _candidateProfile = {
-      'initialised' : false,
-      'data' : null
-    };
+    _resultsBranchWise = {'initialised': false, 'data': null};
+    _resultsCompanyWise = {'initialised': false, 'data': null};
+    _applyForMe = {'initialised': false, 'data': null};
+    _applyForAll = {'initialised': false, 'data': null};
+    _candidateProfile = {'initialised': false, 'data': null};
   }
 
   void setResultsBranchWise(results) {

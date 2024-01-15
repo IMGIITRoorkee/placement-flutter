@@ -13,7 +13,7 @@ import 'package:placement/views/ResultPageView.dart';
 import 'package:placement/views/calendarView.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -21,9 +21,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
   bool _isCollapsed = true;
-  AuthService _auth;
+  late AuthService _auth;
 
   final List<Tab> _bottomTab = <Tab>[
     Tab(
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage>
     if (details.primaryVelocity == 0)
       return; // user have just tapped on screen (no dragging)
 
-    if (details.primaryVelocity.compareTo(0) == -1)
+    if (details.primaryVelocity!.compareTo(0) == -1)
       setState(() {
         _isCollapsed = true;
       });

@@ -3,7 +3,7 @@ import 'package:placement/screens/authenticate/signIn.dart';
 import 'package:placement/screens/authenticate/signUp.dart';
 
 class Authenticate extends StatefulWidget {
-  Authenticate({Key key}) : super(key: key);
+  Authenticate({Key? key}) : super(key: key);
 
   @override
   _AuthenticateState createState() => _AuthenticateState();

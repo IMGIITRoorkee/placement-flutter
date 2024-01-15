@@ -2,8 +2,5 @@ class YearModel {
   final int key;
   final String value;
 
-  YearModel({
-    this.key,
-    this.value
-  });
+  YearModel({required this.key, required this.value});
 }

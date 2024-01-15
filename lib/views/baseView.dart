@@ -4,10 +4,10 @@ import 'package:placement/viewmodels/BaseViewModel.dart';
 import 'package:provider/provider.dart';
 
 class BaseView<T extends BaseViewModel> extends StatefulWidget {
-  final Widget Function(BuildContext context, T model, Widget child) builder;
+  final Widget Function(BuildContext context, T model, Widget? child) builder;
   final Function(T) onModelReady;
 
-  BaseView({this.builder, this.onModelReady});
+  BaseView({required this.builder, required this.onModelReady});
 
   @override
   _BaseViewState<T> createState() => _BaseViewState<T>();

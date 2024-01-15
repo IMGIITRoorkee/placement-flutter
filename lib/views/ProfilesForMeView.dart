@@ -6,7 +6,7 @@ import 'package:placement/viewmodels/ProfilesForMeViewModel.dart';
 import 'package:placement/views/baseView.dart';
 
 class ProfilesForMeView extends StatelessWidget {
-  const ProfilesForMeView({Key key}) : super(key: key);
+  const ProfilesForMeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class ProfilesForMeView extends StatelessWidget {
       onRefresh: model.refreshAndWait,
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: model.profiles.length,
+        itemCount: model.profiles!.length,
         padding: EdgeInsets.all(5),
         itemBuilder: (BuildContext context, int index) {
           return Card(
@@ -67,9 +67,9 @@ class ProfilesForMeView extends StatelessWidget {
             elevation: 0.3,
             child: ListTile(
               title: Text(
-                model.profiles[index].companyName +
+                model.profiles![index].companyName +
                     " (" +
-                    model.profiles[index].name +
+                    model.profiles![index].name +
                     ")",
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -83,16 +83,16 @@ class ProfilesForMeView extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).pushNamed("/profileDetail", arguments: {
-                  "profileId": model.profiles[index].profileId,
+                  "profileId": model.profiles![index].profileId,
                   "parentViewModel": model,
-                  "profileModel": model.profiles[index]
+                  "profileModel": model.profiles![index]
                 });
               },
               //trailing: _profileStatusIcon(context,model.profiles[index].status,model.profiles[index])
               trailing: ProfileStatusIcon(
                 model: model,
-                profile: model.profiles[index],
-                status: model.profiles[index].status,
+                profile: model.profiles![index],
+                status: model.profiles![index].status,
               ),
             ),
           );

@@ -13,7 +13,7 @@ import 'package:placement/services/api_models/fetchService.dart';
 import 'package:placement/shared/GlobalCache.dart';
 
 class AuthService {
-  FetchService _fetchService;
+  late FetchService _fetchService;
   static final AuthService _auth = AuthService.internal();
 
   factory AuthService() => _auth;
@@ -47,7 +47,7 @@ class AuthService {
 
   Future<void> refreshToken() async {
     var _jsonData;
-    String _refresh = _box.get('refresh');
+    String? _refresh = _box.get('refresh');
     try {
       var _res = await http.post(
         Uri.parse(EndPoints.HOST + EndPoints.REFRESH),

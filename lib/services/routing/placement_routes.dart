@@ -23,14 +23,14 @@ class RouteGeneratorPlacement {
         return MaterialPageRoute(builder: (_) => HomePage());
         break;
       case '/result_details_branchwise':
-        var _resultArgs = settings.arguments;
+        var _resultArgs = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (_) => ResultDetailsBranchWise(
                   args: _resultArgs,
                 ));
         break;
       case '/result_details_companywise':
-        var _resultArgs = settings.arguments;
+        var _resultArgs = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (_) => ResultDetailsCompanyWise(
                   args: _resultArgs,
@@ -40,7 +40,7 @@ class RouteGeneratorPlacement {
         return MaterialPageRoute(builder: (_) => NotificationsScreen());
         break;
       case '/profileDetail':
-        var _profileArgs = settings.arguments;
+        var _profileArgs = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (_) => CompanyDetailView(args: _profileArgs));
         break;

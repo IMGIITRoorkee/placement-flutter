@@ -17,7 +17,7 @@ class ResumeListViewModel extends BaseViewModel {
     setIdle();
   }
 
-  void launchURL(String url) async {
+  Future<void> launchURL(String url) async {
     if (await canLaunchUrlString(url)) {
       await launchUrlString(url);
     } else {

@@ -7,9 +7,9 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class CandidateDetailsViewModel extends BaseViewModel {
   ApplyService _applyService = locator<ApplyService>();
-  CandidateModel _candidate;
+  CandidateModel? _candidate;
   AuthService _auth = AuthService();
-  CandidateModel get candidate => _candidate;
+  CandidateModel? get candidate => _candidate;
 
   Future<void> fetchCandidate() async {
     setLoading();
@@ -17,10 +17,11 @@ class CandidateDetailsViewModel extends BaseViewModel {
     setIdle();
   }
 
-  void launchURL(String url) async {
-    if (await canLaunchUrlString(url)) {
+  Future<void> launchURL(String url) async {
+    try {
       await launchUrlString(url);
-    } else {
+    } catch (e) {
+      print('Error launching URL: $e');
       throw 'Could not launch $url';
     }
   }
