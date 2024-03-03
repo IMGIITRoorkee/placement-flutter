@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 3.10.0
 
 environment:
-  sdk: ">=2.13.0 <3.0.0"
+  sdk: ">=3.0.0"
 
 dependencies:
   flutter:
@@ -37,13 +37,12 @@ dependencies:
   fluttertoast: ^8.1.1
   url_launcher: ^6.0.2
   rename: ^2.0.1
-  flutter_launcher_icons: ^0.11.0
   cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_lints: ^3.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
