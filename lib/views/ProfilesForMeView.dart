@@ -31,30 +31,31 @@ class ProfilesForMeView extends StatelessWidget {
 
   Widget _applyList(BuildContext context, ProfilesForMeViewModel model) {
     if (model.isNull) {
-      return Center(
-        child: Text("Not Eligible for any active season"),
-      );
-      // return BaseView<CandidateDetailsViewModel>(
-      //   onModelReady: (model) {
-      //     model.fetchCandidate();
-      //   },
-      //   builder: (context, model, child) {
-      //     if (model.candidate.internshipStatus == "Closed" ||
-      //         model.candidate.season == "Not Eligible") {
-      //       return Center(
-      //         child: Text("Not Eligible for any active season"),
-      //       );
-      //     }
-
-      //     return Center(
-      //       child: Text("Not Eligible for any open profiles"),
-      //     );
-      //   },
+      // return Center(
+      //   child: Text("Not Eligible for any active season"),
       // );
+      return BaseView<CandidateDetailsViewModel>(
+        onModelReady: (model) {
+          model.fetchCandidate();
+        },
+        builder: (context, model, child) {
+          if (model.candidate!.internshipStatus == "Closed" ||
+              model.candidate!.season == "Not Eligible") {
+            return Center(
+              child: Text("Not Eligible for any active season"),
+            );
+          }
+
+          return Center(
+            child: Text("Not Eligible for any open profiles"),
+          );
+        },
+      );
       // return Center(
       //   child: Text("Not Eligible for any open profiles"),
       // );
     }
+
     return RefreshIndicator(
       onRefresh: model.refreshAndWait,
       child: ListView.builder(
