@@ -42,9 +42,20 @@ class AuthService {
     }
   }
 
-  Future<void> refreshToken() async {
+  Future<bool>? _refreshInFlight;
+
+  // Concurrent callers (app-resume listener, parallel 401 retries) must share
+  // one refresh attempt instead of racing separate requests on the same token.
+  Future<bool> refreshToken() {
+    return _refreshInFlight ??= _doRefreshToken().whenComplete(() {
+      _refreshInFlight = null;
+    });
+  }
+
+  Future<bool> _doRefreshToken() async {
     var _jsonData;
     String? _refresh = _box.get('refresh');
+    if (_refresh == null || _refresh.isEmpty) return false;
     try {
       var _res = await http.post(
         Uri.parse(EndPoints.HOST + EndPoints.REFRESH),
@@ -52,9 +63,26 @@ class AuthService {
       );
       if (_res.statusCode == 200) {
         _jsonData = json.decode(_res.body);
-        _encryptToken(_jsonData['access']);
+        await _box.put('access', _jsonData['access']);
+        if (_jsonData['refresh'] != null &&
+            (_jsonData['refresh'] as String).isNotEmpty) {
+          await _box.put('refresh', _jsonData['refresh']);
+        }
+        return true;
       }
-    } catch (e) {}
+      // Only an explicit 401/403 means the refresh token itself is dead
+      // (expired/blacklisted). Other non-200s (5xx, 429, ...) are server-side
+      // trouble, not proof the session is invalid, so don't wipe it for those.
+      if (_res.statusCode == 401 || _res.statusCode == 403) {
+        await logOut();
+      }
+      return false;
+    } catch (e) {
+      // Network/parse failure: the refresh token may still be valid, so don't
+      // wipe the session over a transient error.
+      print(e.toString());
+      return false;
+    }
   }
 
   bool authStateListener() {
@@ -80,12 +108,8 @@ class AuthService {
   }
 
   fetchHeaderProvider(String endpoint) async {
-    String _access = await _box.get('access');
+    String _access = _box.get('access', defaultValue: '');
     return {'Authorization': 'Bearer ' + _access};
-  }
-
-  _encryptToken(String access) {
-    _box.put('access', access);
   }
 
   Future<void> _openEncryptedBox() async {

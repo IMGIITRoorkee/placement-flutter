@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:placement/services/generic/applyService.dart';
 import 'package:placement/services/generic/calendarService.dart';
 import 'package:placement/services/generic/resultService.dart';
+import 'package:placement/services/routing/navigationService.dart';
 import 'package:placement/shared/GlobalCache.dart';
 import 'package:placement/viewmodels/CalendarViewModel.dart';
 import 'package:placement/services/generic/requestService.dart';
@@ -25,6 +26,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => ResultService());
   locator.registerLazySingleton(() => ApplyService());
   locator.registerLazySingleton(() => GlobalCache());
+  locator.registerLazySingleton(() => NavigationService());
 
   locator.registerFactory(() => CalendarViewModel());
   locator.registerFactory(() => ResultPageViewModel());
