@@ -35,6 +35,9 @@ class ProfilesForAllView extends StatelessWidget {
     if (profiles == null) {
       return ErrorWidgetWithRefreshCallback(onRefresh: model.refreshAndWait);
     }
+    if (profiles.isEmpty) {
+      return Center(child: Text("No companies open right now"),);
+    }
     return RefreshIndicator(
       onRefresh: model.refreshAndWait,
       child: ListView.builder(
