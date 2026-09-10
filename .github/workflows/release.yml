@@ -127,6 +127,7 @@ jobs:
           BRANCH: ${{ github.ref_name }}
         run: |
           git push origin --delete "$TAG" || echo "::warning::tag $TAG was already gone"
+          git fetch --force origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}"
           REMOTE=$(git rev-parse "origin/${BRANCH}")
           if [ "$REMOTE" != "$SHA" ]; then
             echo "::warning::${BRANCH} has moved on ($REMOTE), so the version commit $SHA was left in place. Revert it by hand if you want the version number back."
