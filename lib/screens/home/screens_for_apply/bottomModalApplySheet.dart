@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../locator.dart';
 import "../../../models/resumeModel.dart";
 import '../../../resources/endpoints.dart';
 import '../../../services/api_models/fetchService.dart';
 import '../../../services/generic/requestService.dart';
+import '../../../shared/debugLog.dart';
 import '../../../shared/loadingPage.dart';
 
 class BottomModalApplySheet extends StatefulWidget {
@@ -91,8 +95,7 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
                                     Fluttertoast.showToast(
                                         msg: "Processing...",
                                         toastLength: Toast.LENGTH_LONG);
-                                    // ignore: unused_local_variable
-                                    int _apply = await _requestService
+                                    final _apply = await _requestService
                                         .makePostRequest(
                                             EndPoints.HOST +
                                                 EndPoints.APPLICATIONS,
@@ -103,15 +106,16 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
                                               snapshot.data[index].id.toString()
                                           //"cover_letter": null
                                         });
+                                    if (!mounted) return;
                                     Navigator.of(context).pop();
-                                    if (_apply == -1){
+                                    if (_isSuccess(_apply)) {
                                       // return true to reload parent page
                                       Navigator.of(context).pop(true);
                                     } else {
                                       Fluttertoast.showToast(
-                                        msg: "An error occurred. Please check your connection.",
-                                        textColor: Colors.red,
-                                        toastLength: Toast.LENGTH_LONG);
+                                          msg: _errorMessage(_apply),
+                                          textColor: Colors.red,
+                                          toastLength: Toast.LENGTH_LONG);
                                       Navigator.of(context).pop(false);
                                     }
                                   },
@@ -128,6 +132,26 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
         );
       },
     );
+  }
+
+  /// The applications endpoint replies 201 on a successful application, so
+  /// anything in the 2xx range counts as success.
+  bool _isSuccess(http.Response? res) =>
+      res != null && res.statusCode >= 200 && res.statusCode < 300;
+
+  String _errorMessage(http.Response? res) {
+    if (res == null) {
+      return "An error occurred. Please check your connection.";
+    }
+    try {
+      final _body = json.decode(res.body);
+      if (_body is Map && _body["error"] != null) {
+        return _body["error"].toString();
+      }
+    } catch (e) {
+      debugLog("Could not parse apply error body: ${e.toString()}");
+    }
+    return "An error occurred. Please try again.";
   }
 
   Widget _headerWidget(int index) {

@@ -80,7 +80,7 @@ class AuthService {
     await _box.put('refresh', refresh);
   }
 
-  fetchHeaderProvider(String endpoint) async {
+  Future<Map<String, String>> fetchHeaderProvider(String endpoint) async {
     String _access = await _box.get('access');
     return {'Authorization': 'Bearer ' + _access};
   }
