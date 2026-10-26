@@ -34,4 +34,33 @@ class RequestService {
       return -2;
     }
   }
+
+  /// Sends [body] as JSON and returns the response whatever its status, for
+  /// callers that need the status code. Returns null when the request could
+  /// not be made or took longer than [timeout].
+  Future<http.Response?> makeJsonRequest(String method, String endpoint,
+      {Map<String, dynamic>? body,
+      Duration timeout = const Duration(seconds: 30)}) async {
+    http.Client _client = http.Client();
+    try {
+      var req = http.Request(method, Uri.parse(endpoint));
+      req.headers.addAll(
+          Map<String, String>.from(await _auth.fetchHeaderProvider(endpoint)));
+      if (body != null) {
+        req.headers['Content-Type'] = 'application/json';
+        req.body = json.encode(body);
+      }
+      var res = await _client
+          .send(req)
+          .then(http.Response.fromStream)
+          .timeout(timeout);
+      debugLog("$method $endpoint returned status ${res.statusCode}");
+      return res;
+    } catch (e) {
+      debugLog("$method $endpoint failed: ${e.toString()}");
+      return null;
+    } finally {
+      _client.close();
+    }
+  }
 }
