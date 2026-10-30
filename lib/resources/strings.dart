@@ -13,6 +13,16 @@ class Strings {
     'By Company'
   ];
   
+  // Placeholder wording until TPO provides the final text.
+  static const String ACKNOWLEDGEMENT_TITLE = 'Acknowledgement';
+  static const List<String> ACKNOWLEDGEMENT_TEXT = <String>[
+    'By taking part in this season, I confirm that the details in my profile and resumes are true and complete.',
+    'I will follow the rules and instructions of the Training and Placement Office, including those about applications, tests, interviews and offers.',
+    'I understand that breaking these rules may lead to action by the Training and Placement Office, including removal from the season.',
+  ];
+  static const String ACKNOWLEDGEMENT_CHECKBOX = 'I have read and accept the above';
+  static const String ACKNOWLEDGEMENT_ACCEPT = 'Accept and continue';
+
   static const String AUTH_BOX = 'placementAuthBox';
   static const String FAQ_LINK = "https://channeli.in/placement_and_internship/tpo_forum/";
   static const String ABOUT_US_LINK = "https://channeli.in/maintainer_site/";
