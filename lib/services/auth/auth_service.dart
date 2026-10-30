@@ -91,13 +91,7 @@ class AuthService {
   }
 
   dynamic logOut() async {
-    GlobalCache _cache = locator<GlobalCache>();
-    _cache.branchWiseResults = null;
-    _cache.companyWiseResults = null;
-    _cache.filterFields = null;
-    _cache.profilesForMe = null;
-    _cache.profilesOpenForAll = null;
-    _cache.candidateData = null;
+    locator<GlobalCache>().clear();
     await _box.delete('access');
     await _box.delete('refresh');
     return true;
