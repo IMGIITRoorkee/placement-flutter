@@ -156,7 +156,6 @@ class CompanyDetailView extends StatelessWidget {
 
   Widget _profileDetail(
       BuildContext context, CompanyDetailViewModel model,DetailCompanyProfileModel companyProfile, double _width) {
-    print("REBUILD!! + ${companyProfile.packageDescription.toString()}");
     return SizedBox(
       width: _width * 0.9,
       child: Column(
@@ -445,7 +444,6 @@ class CompanyDetailView extends StatelessWidget {
                 context: context,
                 builder: (context) => BottomModalApplySheet(profile: profileModel));
               if (_didApply == true){
-                print("APPLIED!!");
                 parentViewModel.refresh();
                 model.refreshDetails();
               }

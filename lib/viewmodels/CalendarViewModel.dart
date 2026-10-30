@@ -1,6 +1,7 @@
 import '../locator.dart';
 import '../models/calendarEventModel.dart';
 import '../services/generic/calendarService.dart';
+import '../shared/debugLog.dart';
 import 'BaseViewModel.dart';
 
 class CalendarViewModel extends BaseViewModel {
@@ -39,7 +40,7 @@ class CalendarViewModel extends BaseViewModel {
         try {
           eveDay = DateTime.parse(item.dateTime);
         } catch (e) {
-          print(e);
+          debugLog(e);
           continue;
         }
         DateTime createDay = DateTime(eveDay.year, eveDay.month, eveDay.day);
@@ -49,7 +50,6 @@ class CalendarViewModel extends BaseViewModel {
         if (today.isBefore(eveDay)) _upcomingEvents.add(item);
       }
       _upcomingEvents = _sortedCalendarModel(_upcomingEvents);
-      print("UPCOMING! ${_upcomingEvents.length}");
     }
     setIdle();
   }

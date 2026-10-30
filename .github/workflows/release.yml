@@ -1,0 +1,174 @@
+name: release
+on:
+  workflow_call:
+    inputs:
+      is_beta:
+        description: Mark the GitHub release as a prerelease
+        required: true
+        type: boolean
+      bump_type:
+        description: Bump the version name (major, minor, patch, none)
+        type: string
+        default: patch
+      publish_play:
+        type: boolean
+        default: false
+      play_track:
+        type: string
+        default: internal
+      play_status:
+        type: string
+        default: completed
+permissions: {}
+jobs:
+  prepare_release:
+    name: Bump version and prepare notes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+      version_name: ${{ steps.bump.outputs.version_name }}
+      tag: ${{ steps.tag.outputs.tag }}
+      artifact_prefix: ${{ steps.tag.outputs.tag }}
+      ref: ${{ steps.commit.outputs.commit_long_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Bump version in pubspec.yaml
+        id: bump
+        env:
+          BUMP_TYPE: ${{ inputs.bump_type }}
+        run: bash scripts/bump_version.sh "$BUMP_TYPE"
+      - name: Compute release tag
+        id: tag
+        env:
+          VERSION_NAME: ${{ steps.bump.outputs.version_name }}
+          IS_BETA: ${{ inputs.is_beta }}
+        run: |
+          TAG=$(bash scripts/compute_tag.sh "$VERSION_NAME" "$IS_BETA")
+          echo "artifacts will be named placement-${TAG}-<abi>.apk"
+
+      - name: Generate changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          IS_BETA: ${{ inputs.is_beta }}
+        run: bash scripts/gen_changelog.sh "$REPO" "$IS_BETA" release_notes.md
+
+      - name: Append downloads table
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          REPO: ${{ github.repository }}
+          PREFIX: ${{ steps.tag.outputs.tag }}
+        run: |
+          bash scripts/gen_downloads_table.sh "$TAG" "$REPO" "$PREFIX" >> release_notes.md
+          cat release_notes.md
+
+      - name: Commit and tag
+        id: commit
+        uses: EndBug/add-and-commit@v11
+        with:
+          default_author: github_actions
+          add: pubspec.yaml
+          message: 'chore: version ${{ steps.bump.outputs.version }}'
+          tag: '-a ${{ steps.tag.outputs.tag }} -m "${{ steps.tag.outputs.tag }}"'
+          push: true
+
+      - name: Verify the version commit was pushed
+        env:
+          COMMITTED: ${{ steps.commit.outputs.committed }}
+          TAG_PUSHED: ${{ steps.commit.outputs.tag_pushed }}
+          SHA: ${{ steps.commit.outputs.commit_long_sha }}
+        run: |
+          if [ "$COMMITTED" != "true" ] || [ "$TAG_PUSHED" != "true" ] || [ -z "$SHA" ]; then
+            echo "::error::Version commit or tag was not pushed (committed=$COMMITTED tag_pushed=$TAG_PUSHED sha=$SHA)."
+            exit 1
+          fi
+          echo "released from $SHA"
+
+      - name: Upload release notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes
+          path: release_notes.md
+          if-no-files-found: error
+
+  build_mobile:
+    name: Build
+    needs: prepare_release
+    uses: ./.github/workflows/build-mobile.yml
+    permissions:
+      contents: read
+    secrets: inherit
+    with:
+      ref: ${{ needs.prepare_release.outputs.ref }}
+      artifact_prefix: ${{ needs.prepare_release.outputs.artifact_prefix }}
+      publish_play: ${{ inputs.publish_play }}
+      play_track: ${{ inputs.play_track }}
+      play_status: ${{ inputs.play_status }}
+
+  rollback_version:
+    name: Roll back the version commit
+    needs: [prepare_release, build_mobile]
+    if: ${{ always() && needs.prepare_release.outputs.ref != '' && needs.build_mobile.result != 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Delete the tag and rewind the version commit
+        env:
+          TAG: ${{ needs.prepare_release.outputs.tag }}
+          SHA: ${{ needs.prepare_release.outputs.ref }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git push origin --delete "$TAG" || echo "::warning::tag $TAG was already gone"
+          git fetch --force origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}"
+          REMOTE=$(git rev-parse "origin/${BRANCH}")
+          if [ "$REMOTE" != "$SHA" ]; then
+            echo "::warning::${BRANCH} has moved on ($REMOTE), so the version commit $SHA was left in place. Revert it by hand if you want the version number back."
+            exit 0
+          fi
+          git push --force-with-lease="refs/heads/${BRANCH}:${SHA}" \
+            origin "${SHA}^:refs/heads/${BRANCH}"
+          echo "rolled ${BRANCH} back to ${SHA}^ and deleted ${TAG}"
+
+  create_release:
+    name: Create GitHub release
+    needs: [prepare_release, build_mobile]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Download release notes
+        uses: actions/download-artifact@v4
+        with:
+          name: release-notes
+
+      - name: Download APKs
+        uses: actions/download-artifact@v4
+        with:
+          name: release-apks
+          path: artifacts
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ needs.prepare_release.outputs.tag }}
+          IS_BETA: ${{ inputs.is_beta }}
+        run: |
+          ARGS=(--repo "$REPO" --title "$TAG" --notes-file release_notes.md --verify-tag)
+          if [ "$IS_BETA" = "true" ]; then
+            ARGS+=(--prerelease)
+          else
+            # Stable releases land as drafts so the notes can be read over
+            # before they go public.
+            ARGS+=(--draft)
+          fi
+          gh release create "$TAG" "${ARGS[@]}" artifacts/*.apk

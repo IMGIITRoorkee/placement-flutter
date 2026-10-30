@@ -3,6 +3,7 @@
 *.log
 *.pyc
 *.swp
+*.jks
 .DS_Store
 .atom/
 .buildlog/
@@ -32,6 +33,26 @@
 
 # Web related
 lib/generated_plugin_registrant.dart
+
+# Signing material. CI recreates all of this from repository secrets, see
+# .github/RELEASING.md - none of it belongs in the repo.
+android/key*.properties
+android/app/upload-keystore.jks
+*.p12
+*.p8
+*.pem
+*.mobileprovision
+
+# iOS
+ios/build/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+
+# fastlane run output
+android/fastlane/report.xml
+android/fastlane/Preview.html
+android/fastlane/test_output/
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages

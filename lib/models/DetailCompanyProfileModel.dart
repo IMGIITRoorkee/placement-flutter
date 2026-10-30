@@ -51,7 +51,6 @@ class DetailCompanyProfileModel {
       branchList.add(BranchRequirementModel.fromJson(item));
     }
     List<RoundSetModel> _roundSet = [];
-    print("RounrSet!!! = " + json['roundSet'].toString());
     for (var item in json['roundSet']) {
       _roundSet.add(RoundSetModel.fromJson(item));
     }

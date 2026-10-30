@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../models/companyWiseStudentModel.dart';
 import '../../../resources/endpoints.dart';
 import '../../../services/api_models/fetchService.dart';
+import '../../../shared/ErrorWidget.dart';
 import '../../../shared/loadingPage.dart';
 
 class ResultDetailsCompanyWise extends StatefulWidget {
@@ -19,6 +20,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
   var _fetch;
   List<CompantWiseStudentModel> _results = [];
   List<CompantWiseStudentModel> _resultsBackup = [];
+  late Future<void> _resultsFuture;
   late AnimationController animationController;
   late Animation<double> animation;
   OverlayEntry? overlayEntry;
@@ -27,6 +29,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
   void initState() {
     super.initState();
     _fetch = FetchService();
+    _resultsFuture = _fetchResults();
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -126,10 +129,13 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
 
   Widget _companyResults(BuildContext context) {
     return FutureBuilder(
-      future: _futureOfResults(context),
+      future: _resultsFuture,
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
+        if (snapshot.connectionState != ConnectionState.done) {
           return LoadingPage();
+        }
+        if (snapshot.hasError) {
+          return ErrorWidgetWithRefreshCallback(onRefresh: _refreshResults);
         }
         if (_results.isEmpty) {
           return Center(child: Text("Looks there's no one with that name :("));
@@ -187,12 +193,20 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
     });
   }
 
-  Future<String> _futureOfResults(BuildContext context) async {
-    if (_resultsBackup.isNotEmpty) return "Success!";
+  Future<void> _refreshResults() async {
+    setState(() {
+      _resultsFuture = _fetchResults();
+    });
+    await _resultsFuture;
+  }
 
+  Future<void> _fetchResults() async {
     List<CompantWiseStudentModel> _studentResults = [];
     var _data = await _fetch
         .fetchDataService(EndPoints.RESULTS_HOST + widget.args['url']);
+    if (_data == null || _data == -1) {
+      throw Exception('Failed to fetch company results');
+    }
     for (var r in _data) {
       _studentResults.add(CompantWiseStudentModel.fromJson(r));
     }
@@ -203,7 +217,5 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise>
       _results = _studentResults;
       _resultsBackup = _results;
     });
-
-    return "Success!";
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/profilesModel.dart';
 import '../resources/R.dart';
 import '../screens/home/screens_for_apply/bottomModalApplySheet.dart';
+import 'debugLog.dart';
 
 class ProfileStatusIcon extends StatelessWidget {
   final String status;
@@ -72,17 +73,15 @@ class ProfileStatusIcon extends StatelessWidget {
             Icons.send,
             color: Colors.green,
           ),
-          onPressed: () {
-            showModalBottomSheet(
+          onPressed: () async {
+            bool? _didApply = await showModalBottomSheet<bool>(
                 context: context,
-                builder: (context) {
-                  return BottomModalApplySheet(
-                    profile: profile,
-                  );
-                }).then((value) {
-              print("APPLIED!!");
-              model.refresh();
-            });
+                builder: (context) => BottomModalApplySheet(profile: profile));
+              if (_didApply == true){
+                debugLog("APPLIED!!");
+                model.refresh();
+                model.refreshDetails();
+              }
           },
         );
       case 'withdrawable':

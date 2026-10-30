@@ -1,13 +1,13 @@
 import 'package:http/http.dart' as http;
 
 import '../../resources/endpoints.dart';
+import '../../shared/debugLog.dart';
 import '../auth/auth_service.dart';
 
 class DeleteService {
   AuthService _auth = AuthService();
 
   Future<void> deleteApplicationService(int applicationID) async {
-    print("HELLO!! im in!! DELETING $applicationID");
     await genericDeleteService(EndPoints.HOST +
         EndPoints.APPLICATIONS +
         applicationID.toString() +
@@ -18,11 +18,9 @@ class DeleteService {
     try {
       var res = await http.delete(Uri.parse(url),
           headers: await _auth.fetchHeaderProvider(''));
-      print(res.statusCode);
-      print(res.body);
+      debugLog("DELETE $url returned status ${res.statusCode}");
     } catch (e) {
-      print("DELETION FAILED!");
-      print(e);
+      debugLog("DELETE $url failed: $e");
     }
   }
 }

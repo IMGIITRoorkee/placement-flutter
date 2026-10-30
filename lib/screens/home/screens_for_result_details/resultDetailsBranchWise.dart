@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../models/branchWiseStudentModel.dart';
 import '../../../resources/endpoints.dart';
 import '../../../services/api_models/fetchService.dart';
+import '../../../shared/ErrorWidget.dart';
 import '../../../shared/loadingPage.dart';
 
 class ResultDetailsBranchWise extends StatefulWidget {
@@ -19,6 +20,7 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
   var _fetch;
   List<BranchWiseStudentModel> _results = [];
   List<BranchWiseStudentModel> _resultsBackup = [];
+  late Future<void> _resultsFuture;
   late AnimationController animationController;
   late Animation<double> animation;
   OverlayEntry? overlayEntry;
@@ -27,6 +29,7 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
   void initState() {
     super.initState();
     _fetch = FetchService();
+    _resultsFuture = _fetchResults();
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -125,10 +128,13 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
 
   Widget _branchResults(BuildContext context) {
     return FutureBuilder(
-      future: _futureOfResults(context),
+      future: _resultsFuture,
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
+        if (snapshot.connectionState != ConnectionState.done) {
           return LoadingPage();
+        }
+        if (snapshot.hasError) {
+          return ErrorWidgetWithRefreshCallback(onRefresh: _refreshResults);
         }
         if (_results.isEmpty) {
           return Center(child: Text("Looks there's no one with that name :("));
@@ -172,12 +178,20 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
     });
   }
 
-  Future<String> _futureOfResults(BuildContext context) async {
-    if (_resultsBackup.isNotEmpty) return "Success!";
+  Future<void> _refreshResults() async {
+    setState(() {
+      _resultsFuture = _fetchResults();
+    });
+    await _resultsFuture;
+  }
 
+  Future<void> _fetchResults() async {
     List<BranchWiseStudentModel> _studentResults = [];
     var _data = await _fetch
         .fetchDataService(EndPoints.RESULTS_HOST + widget.args['url']);
+    if (_data == null || _data == -1) {
+      throw Exception('Failed to fetch branch results');
+    }
     for (var r in _data) {
       _studentResults.add(BranchWiseStudentModel.fromJson(r));
     }
@@ -189,7 +203,5 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise>
       _results = _studentResults;
       _resultsBackup = _results;
     });
-
-    return "Success!";
   }
 }

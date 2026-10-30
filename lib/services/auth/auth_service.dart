@@ -8,6 +8,7 @@ import '../../locator.dart';
 import '../../resources/endpoints.dart';
 import '../../resources/strings.dart';
 import '../../shared/GlobalCache.dart';
+import '../../shared/debugLog.dart';
 
 class AuthService {
   // FetchService _fetchService;
@@ -29,7 +30,7 @@ class AuthService {
     try {
       var res = await http.post(Uri.parse(EndPoints.HOST + EndPoints.LOGIN),
           body: data);
-      print("GOT CODE FOR LOGIN ${res.statusCode}");
+      debugLog("Login request returned status ${res.statusCode}");
       if (res.statusCode == 200) {
         jsonData = json.decode(res.body);
         await _encrypt(jsonData["access"], jsonData["refresh"]);
@@ -37,7 +38,7 @@ class AuthService {
       }
       return -2;
     } catch (e) {
-      print(e.toString());
+      debugLog(e.toString());
       return -1;
     }
   }
@@ -113,7 +114,7 @@ class AuthService {
   }
 
   Future<void> _openEncryptedBox() async {
-    print("initialising box");
+    debugLog("initialising box");
     await Hive.initFlutter();
     await Hive.openBox(Strings.AUTH_BOX);
     _box = Hive.box(Strings.AUTH_BOX);

@@ -56,7 +56,6 @@ class CompanyDetailViewModel extends BaseViewModel {
   }
 
   Future<void> fetchCompanyDetails(int profileId) async {
-    print("DETAIL FOR PID $profileId");
     _profileId = profileId;
     setLoading();
     _companyProfile = await _applyService.fetchCompanyDetails(profileId);

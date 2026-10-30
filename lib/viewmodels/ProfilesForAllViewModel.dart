@@ -53,13 +53,11 @@ class ProfilesForAllViewModel extends BaseViewModel {
   }
 
   Future<void> deleteApplication(int applicationId) async {
-    print("DELETING FOR PID $applicationId");
     await _deleteService.deleteApplicationService(applicationId);
     refresh();
   }
   
   Future<void> populateProfiles() async {
-    print("POPULATING ALL");
     setLoading();
     _profiles = await _applyService.fetchProfileForAll();
     setIdle();

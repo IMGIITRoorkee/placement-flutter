@@ -1,5 +1,6 @@
-# Uncomment this line to define a global platform for your project
-# platform :ios, '11.0'
+# Matches IPHONEOS_DEPLOYMENT_TARGET in Runner.xcodeproj and the minimum iOS
+# version supported by the pinned Flutter SDK.
+platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'

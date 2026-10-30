@@ -54,7 +54,6 @@ class ProfilesForMeViewModel extends BaseViewModel {
   }
 
   Future<void> deleteApplication(int applicationId) async {
-    print("DELETING FOR PID $applicationId");
     await _deleteService.deleteApplicationService(applicationId);
     refresh();
   }

@@ -1,0 +1,129 @@
+name: build_mobile
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit to build
+        required: true
+        type: string
+      artifact_prefix:
+        description: Prefix used when naming release artefacts, e.g. v2.0.1-beta
+        required: true
+        type: string
+      publish_play:
+        description: Upload the App Bundle to the Play Console
+        type: boolean
+        default: false
+      play_track:
+        description: Play Console track to publish to
+        type: string
+        default: internal
+      play_status:
+        description: Play Console release status (completed, draft, inProgress)
+        type: string
+        default: completed
+
+permissions: {}
+
+jobs:
+  build_android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - name: Restore keystore and signing config
+        env:
+          ANDROID_SIGNING_KEYSTORE: ${{ secrets.ANDROID_SIGNING_KEYSTORE }}
+          ANDROID_SIGNING_KEY_PROPERTIES: ${{ secrets.ANDROID_SIGNING_KEY_PROPERTIES }}
+        run: |
+          if [ -z "$ANDROID_SIGNING_KEYSTORE" ] || [ -z "$ANDROID_SIGNING_KEY_PROPERTIES" ]; then
+            echo "::error::ANDROID_SIGNING_KEYSTORE and ANDROID_SIGNING_KEY_PROPERTIES must both be set, or the release build cannot be signed. See .github/RELEASING.md."
+            exit 1
+          fi
+          printf '%s' "$ANDROID_SIGNING_KEYSTORE" | base64 -d > "$RUNNER_TEMP/upload-keystore.jks"
+          printf '%s' "$ANDROID_SIGNING_KEY_PROPERTIES" | base64 -d > android/key.properties
+          printf '\nstoreFile=%s\n' "$RUNNER_TEMP/upload-keystore.jks" >> android/key.properties
+          for KEY in keyAlias keyPassword storePassword; do
+            grep -q "^${KEY}=" android/key.properties || {
+              echo "::error::ANDROID_SIGNING_KEY_PROPERTIES has no ${KEY}."
+              exit 1
+            }
+          done
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build APKs and App Bundle
+        env:
+          PREFIX: ${{ inputs.artifact_prefix }}
+        run: |
+          flutter build apk --release --split-per-abi
+          flutter build appbundle --release
+
+          mkdir -p build_final
+          for abi in arm64-v8a armeabi-v7a x86_64; do
+            src="build/app/outputs/flutter-apk/app-${abi}-release.apk"
+            if [ -f "$src" ]; then
+              cp "$src" "build_final/placement-${PREFIX}-${abi}.apk"
+            fi
+          done
+          cp build/app/outputs/bundle/release/app-release.aab "build_final/placement-${PREFIX}.aab"
+          ls -lh build_final
+      - name: Upload APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apks
+          path: build_final/*.apk
+          if-no-files-found: error
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-aab
+          path: build_final/*.aab
+          if-no-files-found: error
+
+      - uses: ruby/setup-ruby@v1
+        if: ${{ inputs.publish_play }}
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: android
+
+      - name: Upload to Play Console (${{ inputs.play_track }} / ${{ inputs.play_status }})
+        if: ${{ inputs.publish_play }}
+        working-directory: android
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          PACKAGE_NAME: ${{ vars.PACKAGE_NAME }}
+          PLAY_TRACK: ${{ inputs.play_track }}
+          PLAY_STATUS: ${{ inputs.play_status }}
+        run: |
+          if [ -z "$PLAY_SERVICE_ACCOUNT_JSON" ]; then
+            echo "::error::A Play upload was requested but PLAY_SERVICE_ACCOUNT_JSON is not set. See .github/RELEASING.md."
+            exit 1
+          fi
+          PLAY_JSON_KEY_PATH="$RUNNER_TEMP/play-service-account.json"
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" | base64 -d > "$PLAY_JSON_KEY_PATH" || {
+            echo "::error::PLAY_SERVICE_ACCOUNT_JSON is not valid base64. Set it with: gh secret set PLAY_SERVICE_ACCOUNT_JSON < <(base64 -w0 key.json)"
+            exit 1
+          }
+          jq empty "$PLAY_JSON_KEY_PATH" || {
+            echo "::error::PLAY_SERVICE_ACCOUNT_JSON decoded to something that is not JSON. Encode the service account key file itself, unmodified."
+            exit 1
+          }
+          export PLAY_JSON_KEY_PATH
+          export AAB_PATH="${GITHUB_WORKSPACE}/build_final/placement-${{ inputs.artifact_prefix }}.aab"
+          bundle exec fastlane ci_publish

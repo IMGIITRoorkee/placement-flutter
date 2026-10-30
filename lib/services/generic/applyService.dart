@@ -47,7 +47,6 @@ class ApplyService {
       );
       if(_data != -1 && _data != -2) {
         CandidateModel candidate = CandidateModel.fromJson(_data);
-        print("CANDI = $candidate");
         var _profilePic = await _requestService.makeGetRequest(
           EndPoints.HOST + EndPoints.WHOAMI
         );
@@ -56,7 +55,6 @@ class ApplyService {
             candidate.displayPicture = EndPoints.HOST + _profilePic['displayPicture'].toString();
           }
         }
-        print("CANDI PIC ${candidate.displayPicture}");
         _cache.candidateData = candidate;
       }
     }

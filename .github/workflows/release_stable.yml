@@ -1,0 +1,40 @@
+name: release_stable
+
+#   the Play production release and the GitHub release are created as drafts
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'none = promote the version the betas were built against; minor/major/patch = release straight from stable'
+        type: choice
+        default: none
+        options:
+          - none
+          - minor
+          - patch
+          - major
+      publish_play:
+        description: Upload the App Bundle to the Play Console production track as a draft
+        type: boolean
+        default: false
+
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  release:
+    uses: ./.github/workflows/release.yml
+    permissions:
+      contents: write
+      actions: read
+    secrets: inherit
+    with:
+      is_beta: false
+      bump_type: ${{ inputs.bump_type }}
+      publish_play: ${{ inputs.publish_play }}
+      play_track: production
+      play_status: draft

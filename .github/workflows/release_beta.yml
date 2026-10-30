@@ -1,0 +1,40 @@
+name: release_beta
+
+# Play Console internal track and a GitHub prerelease
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'none = another beta for the current version; minor/major/patch = start a beta series for the next one'
+        type: choice
+        default: none
+        options:
+          - none
+          - minor
+          - major
+          - patch
+      publish_play:
+        description: Upload the App Bundle to the Play Console internal track
+        type: boolean
+        default: false
+
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  release:
+    uses: ./.github/workflows/release.yml
+    permissions:
+      contents: write
+      actions: read
+    secrets: inherit
+    with:
+      is_beta: true
+      bump_type: ${{ inputs.bump_type }}
+      publish_play: ${{ inputs.publish_play }}
+      play_track: internal
+      play_status: completed

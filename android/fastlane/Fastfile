@@ -1,0 +1,20 @@
+default_platform(:android)
+
+platform :android do
+  desc "Upload the App Bundle to the Play Console"
+  lane :ci_publish do
+    upload_to_play_store(
+      package_name: ENV.fetch("PACKAGE_NAME"),
+      aab: ENV.fetch("AAB_PATH"),
+      json_key: ENV.fetch("PLAY_JSON_KEY_PATH"),
+      track: ENV.fetch("PLAY_TRACK", "internal"),
+      release_status: ENV.fetch("PLAY_STATUS", "completed"),
+      # The store listing is maintained in the Play Console
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: true,
+    )
+  end
+end

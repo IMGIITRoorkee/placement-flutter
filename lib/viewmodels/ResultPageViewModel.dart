@@ -47,7 +47,6 @@ class ResultPageViewModel extends BaseViewModel {
     _yearSelectionVariable = year ?? 0;
     _resultTypeVariable = type ?? 0;
     _sortVariable = sort ?? 0;
-    print("SETTING THE FIELDS $_yearSelectionVariable - $_resultTypeVariable - $_sortVariable");
     reload();
     _deleteCachedResults();
     _cacheFields();
