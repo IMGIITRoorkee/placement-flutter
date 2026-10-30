@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'locator.dart';
 import 'resources/R.dart';
+import 'services/routing/navigationService.dart';
 import 'services/routing/placement_routes.dart';
 import 'services/routing/navigationService.dart';
 import 'services/auth/auth_service.dart';
