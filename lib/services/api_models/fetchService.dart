@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:placement/locator.dart';
 import 'package:placement/resources/endpoints.dart';
 import 'package:placement/services/auth/auth_service.dart';
+import 'package:placement/services/generic/acknowledgementService.dart';
 import 'package:placement/services/routing/navigationService.dart';
 import 'package:placement/shared/debugLog.dart';
 
@@ -27,6 +28,7 @@ class FetchService {
     Map<String, String> _headers = await _auth.fetchHeaderProvider(endPoint);
     try {
       var res = await http.get(Uri.parse(endPoint), headers: _headers);
+      locator<AcknowledgementService>().checkResponse(res.statusCode, res.body);
       if (res.statusCode == 200) {
         return json.decode(res.body);
       }

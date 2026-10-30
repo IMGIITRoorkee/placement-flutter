@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:placement/locator.dart';
 import 'package:placement/services/auth/auth_service.dart';
+import 'package:placement/services/generic/acknowledgementService.dart';
 import 'package:placement/shared/debugLog.dart';
 
 class RequestService {
@@ -11,6 +13,7 @@ class RequestService {
     dynamic _headers = await _auth.fetchHeaderProvider(endpoint);
     try {
       var res = await http.get(Uri.parse(endpoint), headers: _headers);
+      _checkGate(res);
       if (res.statusCode == 200) {
         return json.decode(res.body);
       }
@@ -25,6 +28,7 @@ class RequestService {
     try {
       var res = await http.post(Uri.parse(endpoint),
           body: data, headers: await _auth.fetchHeaderProvider(endpoint));
+      _checkGate(res);
       if (res.statusCode == 200) {
         return json.decode(res.body);
       }
@@ -55,6 +59,7 @@ class RequestService {
           .then(http.Response.fromStream)
           .timeout(timeout);
       debugLog("$method $endpoint returned status ${res.statusCode}");
+      _checkGate(res);
       return res;
     } catch (e) {
       debugLog("$method $endpoint failed: ${e.toString()}");
@@ -62,5 +67,10 @@ class RequestService {
     } finally {
       _client.close();
     }
+  }
+
+  /// Opens the acknowledgement screen if [res] is the gate's 403.
+  void _checkGate(http.Response res) {
+    locator<AcknowledgementService>().checkResponse(res.statusCode, res.body);
   }
 }
