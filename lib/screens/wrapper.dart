@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:placement/screens/acknowledgement/acknowledgementGate.dart';
 import 'package:placement/screens/authenticate/authenticatePage.dart';
 import 'package:placement/screens/home/homePage.dart';
 import 'package:placement/shared/dataProvider.dart';
@@ -33,7 +34,9 @@ class _WrapperPageState extends State<WrapperPage> {
     //return _auth.authStateListener() ? HomePage() : Authenticate();
     return ChangeNotifierProvider(
         create: (context) => DataProvider(),
-        child: _auth.authStateListener() ? HomePage() : Authenticate());
+        child: _auth.authStateListener()
+            ? AcknowledgementGate(child: HomePage())
+            : Authenticate());
     // return Scaffold(
     //   //
     //   appBar: AppBar(
