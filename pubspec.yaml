@@ -38,6 +38,7 @@ dependencies:
   rename: ^3.1.0
   flutter_launcher_icons: ^0.14.4
   cached_network_image: ^3.4.1
+  pdfrx: ^2.2.24
 
 dev_dependencies:
   flutter_test:

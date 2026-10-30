@@ -38,7 +38,7 @@ class _AcknowledgementGateState extends State<AcknowledgementGate> {
         }
         var state = snapshot.data;
         if (state != null && state.needsAcknowledgement) {
-          return AcknowledgementScreen(state: state);
+          return AcknowledgementScreen();
         }
         return widget.child;
       },
