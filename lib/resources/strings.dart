@@ -13,6 +13,10 @@ class Strings {
     'By Company'
   ];
   
+  static const String ACKNOWLEDGEMENT_TITLE = 'Acknowledgement';
+  static const String ACKNOWLEDGEMENT_CHECKBOX = 'I have read and accept the above';
+  static const String ACKNOWLEDGEMENT_ACCEPT = 'Accept and continue';
+
   static const String AUTH_BOX = 'placementAuthBox';
   static const String FAQ_LINK = "https://channeli.in/placement_and_internship/tpo_forum/";
   static const String ABOUT_US_LINK = "https://channeli.in/maintainer_site/";

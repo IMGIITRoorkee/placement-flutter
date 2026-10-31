@@ -26,6 +26,9 @@ class EndPoints {
   static final String CANDIDATE_RESUME_LIST = '/api/placement_and_internship/resumes/';
   static final String RESUME_DETAIL = '/api/placement_and_internship/generate_resume/';
   static final String CALENDAR_EVENTS = '/api/placement_and_internship/calendar/';
+  static const String ACKNOWLEDGEMENT = '/api/placement_and_internship/acknowledgement/';
+  static const String ACKNOWLEDGEMENT_PDF =
+      'https://channeli.in/media/placement_and_internship/placement-and-internship-policy-2026-27.pdf';
   static final List<String> RESULTS_COMPANY = [
     '/placement/company/',     // for placement
     '/internship/company/',    // for internship

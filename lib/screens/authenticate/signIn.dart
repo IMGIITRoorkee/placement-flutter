@@ -190,7 +190,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                 debugLog("Signed IN!! with $res");
                 if (res == 0) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/home', (Route<dynamic> route) => false);
+                      '/wrapper', (Route<dynamic> route) => false);
                 } else {
                   showDialog(
                       context: context,

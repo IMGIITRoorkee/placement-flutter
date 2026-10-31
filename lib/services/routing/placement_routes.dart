@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:placement/screens/acknowledgement/acknowledgementScreen.dart';
 import 'package:placement/screens/home/homePage.dart';
 import 'package:placement/screens/home/screens_for_result_details/resultDetailsBranchWise.dart';
 import 'package:placement/screens/home/screens_for_result_details/resultDetailsCompanyWise.dart';
 import 'package:placement/screens/notifications/notificationsScreen.dart';
 import 'package:placement/screens/splash/splash.dart';
 import 'package:placement/screens/wrapper.dart';
+import 'package:placement/services/generic/acknowledgementService.dart';
 import 'package:placement/views/CompanyDetailView.dart';
 import 'package:placement/views/ProfilesAppliedView.dart';
 import 'package:placement/views/ResumeListView.dart';
@@ -30,6 +32,8 @@ class RouteGeneratorPlacement {
             builder: (_) => ResultDetailsCompanyWise(
                   args: _resultArgs,
                 ));
+      case AcknowledgementService.ROUTE:
+        return MaterialPageRoute(builder: (_) => AcknowledgementScreen());
       case '/notifs':
         return MaterialPageRoute(builder: (_) => NotificationsScreen());
       case '/profileDetail':

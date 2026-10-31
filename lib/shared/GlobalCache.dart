@@ -21,4 +21,13 @@ class GlobalCache {
   List<ProfilesModel>? profilesForMe;
 
   List<ProfilesModel>? profilesOpenForAll;
+
+  void clear() {
+    filterFields = null;
+    candidateData = null;
+    companyWiseResults = null;
+    branchWiseResults = null;
+    profilesForMe = null;
+    profilesOpenForAll = null;
+  }
 }
